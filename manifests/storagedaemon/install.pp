@@ -6,6 +6,8 @@
 #
 class bacula::storagedaemon::install {
 
+    include bacula::params
+
     package { 'bacula-storagedaemon':
         name => $::bacula::params::bacula_storagedaemon_package,
         ensure => installed,
