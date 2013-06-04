@@ -1,0 +1,62 @@
+#
+# Default  Bacula File Daemon Configuration file
+#
+#  For Bacula release 5.0.2 (28 April 2010) -- debian squeeze/sid
+#
+# There is not much to change here except perhaps the
+# File daemon Name to
+#
+
+#
+# List Directors who are permitted to contact this File daemon
+#
+Director {
+  Name = <%= director_name %>
+  Password = "<%= pwd_for_director %>"
+
+  <% if tls_enable == "yes" %>
+  TLS Enable = yes
+  TLS Require = yes
+  TLS Verify Peer = yes
+  TLS Certificate = /etc/bacula/ssl/bacula.crt
+  TLS Key = /etc/bacula/ssl/bacula.key
+  TLS CA Certificate File = /etc/bacula/ssl/bacula-ca.crt
+  <% end %>
+}
+
+#
+# Restricted Director, used by tray-monitor to get the
+#   status of the file daemon
+#
+Director {
+  Name = <%= monitor_name %>
+  Password = "<%= pwd_for_monitor %>"
+  Monitor = yes
+}
+
+#
+# "Global" File daemon configuration specifications
+#
+FileDaemon {                          # this is me
+  Name = <%= fqdn %>-fd
+  FDport = 9102                  # where we listen for the director
+  WorkingDirectory = <%= scope.lookupvar('bacula::params::working_directory') %>
+  Pid Directory = <%= scope.lookupvar('bacula::params::pid_directory') %>
+
+  Maximum Concurrent Jobs = 20
+  FDAddress = <%= bind_address %>
+
+  <% if tls_enable == "yes" %>
+  TLS Enable = yes
+  TLS Require = yes
+  TLS Certificate = /etc/bacula/ssl/bacula.crt
+  TLS Key = /etc/bacula/ssl/bacula.key
+  TLS CA Certificate File = /etc/bacula/ssl/bacula-ca.crt
+  <% end %>
+}
+
+# Send all messages except skipped files back to Director
+Messages {
+  Name = Standard
+  director = <%= director_name %> = all, !skipped, !restored
+}

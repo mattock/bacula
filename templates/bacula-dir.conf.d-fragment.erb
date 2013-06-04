@@ -1,0 +1,56 @@
+Job {
+  Name = "Backup <%= fqdn %>"
+  Type = Backup
+  Level = Incremental
+  FileSet="Locally defined files at <%= fqdn %>"
+  Schedule = "WeeklyCycle"
+  Storage = File
+  Messages = Standard
+  Pool = File
+  Priority = 10
+  Write Bootstrap = "/var/lib/bacula/%c.bsr"
+  Client = <%= fqdn %>-fd
+}
+
+Job {
+  Name = "Restore <%= fqdn %>"
+  Type = Restore
+  Client=<%= fqdn %>-fd
+  FileSet="Locally defined files at <%= fqdn %>"
+  Storage = File
+  Pool = File
+  Messages = Standard
+  Where = /var/restore/bacula/<%= fqdn %>
+}
+
+# List of files to be backed up
+FileSet {
+  Name = "Locally defined files at <%= fqdn %>"
+  Include {
+    Options {
+      signature = SHA1
+      compression = GZIP
+    }
+    @/etc/bacula-backup.list
+  }
+}
+
+Client {
+  Name = <%= fqdn %>-fd
+  Address = <%= fqdn %>
+  FDPort = 9102
+  Catalog = MyCatalog
+  Password = "<%= pwd_for_director %>"    # password for FileDaemon
+  File Retention = 30 days            # 30 days
+  Job Retention = 6 months            # six months
+  AutoPrune = yes                     # Prune expired Jobs/Files
+
+  <% if tls_enable == "yes" %>
+  TLS Enable = yes
+  TLS Require = yes
+
+  TLS Certificate = /etc/bacula/ssl/bacula.crt
+  TLS Key = /etc/bacula/ssl/bacula.key
+  TLS CA Certificate File = /etc/bacula/ssl/bacula-ca.crt
+  <% end %>
+}

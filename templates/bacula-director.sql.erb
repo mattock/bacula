@@ -1,0 +1,6 @@
+/* Prepare postgresql database for Bacula directory. Also supports changing user password. */
+
+CREATE USER baculauser;
+ALTER USER baculauser ENCRYPTED PASSWORD '<%= scope.lookupvar('bacula::director::config::bacula_db_password') %>';
+CREATE DATABASE bacula WITH OWNER baculauser ENCODING 'SQL_ASCII' TEMPLATE template0;
+GRANT ALL ON DATABASE bacula TO baculauser;
