@@ -83,6 +83,10 @@ class bacula::filedaemon
         include bacula::filedaemon::packetfilter
     }
 
+    # This class will have to be included, or this node won't be able to export 
+    # firewall resources to the Bacula Storagedaemon
+    include bacula::filedaemon::export
+
     if tagged('monit') {
         include bacula::filedaemon::monit
     }

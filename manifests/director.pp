@@ -84,6 +84,10 @@ class bacula::director(
 
     include bacula::director::service
 
+    # This class will have to be included, or this node won't be able to export 
+    # firewall resources to the Bacula Filedaemons and the Storagedaemon
+    include bacula::director::export
+
     if tagged('packetfilter') {
         class { 'bacula::director::packetfilter':
             console_host => $console_host,
