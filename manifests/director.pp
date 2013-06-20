@@ -25,6 +25,13 @@
 #   Enable TLS. Defaults to 'no'.
 # [*use_puppet_certs*]
 #   Use puppet certs for TLS. Defaults to 'yes'.
+# [*default_schedules*]
+#   An array of "Run" lines to add to the default schedule used by Filedaemons.
+#   Each Filedaemon can override this schedule with their own using the
+#   schedules parameter. By default the following two Run lines are used:
+#
+#   'Level=Full sun at 05:00',
+#   'Level=Incremental mon-sat at 05:00'
 #
 # == Examples
 #
@@ -60,9 +67,11 @@ class bacula::director(
     $postgresql_auth_line,
     $bacula_db_password,
     $tls_enable='no',
-    $use_puppet_certs='yes'
-    )
-    {
+    $use_puppet_certs='yes',
+    $default_schedules = ['Level=Full sun at 05:00',
+                          'Level=Incremental mon-sat at 05:00']
+)
+{
 
     if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
         include bacula::puppetcerts
@@ -80,6 +89,7 @@ class bacula::director(
         postgresql_auth_line => $postgresql_auth_line,
         bacula_db_password => $bacula_db_password,
         tls_enable => $tls_enable,
+        default_schedules => $default_schedules,
     }
 
     include bacula::director::service

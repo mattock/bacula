@@ -24,6 +24,10 @@
 #   Use puppet certs for TLS. Defaults to 'yes'.
 # [*backup_files*]
 #   An array containing the list of directories/files to backup
+# [*schedules*]
+#   An array containing "Run" lines for a Filedaemon-specific schedule. Defaults 
+#   to '' which means that the default Schedule called "default-schedule" 
+#   defined in the bacula::director class is used.
 #
 # == Examples
 #
@@ -35,6 +39,8 @@
 #     bind_address => '0.0.0.0',
 #     tls_enable => 'yes',
 #     backup_files => [ '/etc', '/var/lib/puppet/ssl', '/var/backups/local' ],
+#     schedules => ['Level=Full sun at 01:00',
+#                   'Level=Incremental mon-sat at 01:00'],
 #   }
 #
 # == Authors
@@ -56,7 +62,8 @@ class bacula::filedaemon
     $bind_address='',
     $tls_enable='no',
     $backup_files,
-    $use_puppet_certs='yes'
+    $use_puppet_certs='yes',
+    $schedules=''
 )
 {
 
@@ -75,6 +82,7 @@ class bacula::filedaemon
         bind_address => $bind_address,
         tls_enable => $tls_enable,
         backup_files => $backup_files,
+        schedules => $schedules,
     }
 
     include bacula::filedaemon::service

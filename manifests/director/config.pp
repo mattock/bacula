@@ -12,7 +12,8 @@ class bacula::director::config
     $sd_password,
     $postgresql_auth_line,
     $bacula_db_password,
-    $tls_enable
+    $tls_enable,
+    $default_schedules
     )
     {
 

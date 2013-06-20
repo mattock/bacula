@@ -3,7 +3,7 @@ Job {
   Type = Backup
   Level = Incremental
   FileSet="Locally defined files at <%= fqdn %>"
-  Schedule = "WeeklyCycle"
+  Schedule = <%= schedule_name %>
   Storage = File
   Messages = Standard
   Pool = File
@@ -21,6 +21,14 @@ Job {
   Pool = File
   Messages = Standard
   Where = /var/restore/bacula/<%= fqdn %>
+}
+
+Schedule {
+    # The "schedule_name" variable can't be used here, as "Name" must be unique
+    Name = "<%= fqdn %>-schedule"
+<% schedules.each do |entry| -%>
+    Run = <%= entry %>
+<% end -%>
 }
 
 # List of files to be backed up

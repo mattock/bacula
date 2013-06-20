@@ -58,6 +58,13 @@ Job {
 }
 
 Schedule {
+    Name = "default-schedule"
+<% default_schedules.each do |entry| -%>
+    Run = <%= entry %>
+<% end -%>
+}
+
+Schedule {
   Name = "WeeklyCycle"
   Run = Full 1st sun at 23:05
   Run = Differential 2nd-5th sun at 23:05

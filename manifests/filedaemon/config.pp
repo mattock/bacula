@@ -11,9 +11,18 @@ class bacula::filedaemon::config
     $pwd_for_monitor,
     $bind_address,
     $tls_enable,
-    $backup_files
+    $backup_files,
+    $schedules
 )
 {
+
+    # If the filedaemon was not given a custom schedule, then use the default 
+    # defined in the main Director configuration file
+    if $schedules == '' {
+        $schedule_name = 'default-schedule'
+    } else {
+        $schedule_name = "${::fqdn}-schedule"
+    }
 
     include bacula::params
 
