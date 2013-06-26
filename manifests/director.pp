@@ -33,6 +33,13 @@
 #   'Level=Full sun at 05:00',
 #   'Level=Incremental mon-sat at 05:00'
 #
+# [*email*]
+#   Email address where Bacula's internal notifications are sent. Defaults to 
+#   global variable $::servermonitor.
+# [*monitor_email*]
+#   Email address where local service monitoring software sends it's reports to.
+#   Defaults to global variable $::servermonitor.
+#
 # == Examples
 #
 #   class { 'bacula::director':
@@ -45,6 +52,8 @@
 #     bacula_db_password => 'password',
 #     bind_address => '0.0.0.0',
 #     tls_enable => 'yes',
+#     email => 'backups@domain.com',
+#     monitor_email => 'monit@domain.com',
 #   }
 #
 # == Authors
@@ -69,7 +78,9 @@ class bacula::director(
     $tls_enable='no',
     $use_puppet_certs='yes',
     $default_schedules = ['Level=Full sun at 05:00',
-                          'Level=Incremental mon-sat at 05:00']
+                          'Level=Incremental mon-sat at 05:00'],
+    $email = $::servermonitor,
+    $monitor_email = $::servermonitor
 )
 {
 
@@ -90,6 +101,7 @@ class bacula::director(
         bacula_db_password => $bacula_db_password,
         tls_enable => $tls_enable,
         default_schedules => $default_schedules,
+        email => $email,
     }
 
     include bacula::director::service
@@ -97,6 +109,12 @@ class bacula::director(
     # This class will have to be included, or this node won't be able to export 
     # firewall resources to the Bacula Filedaemons and the Storagedaemon
     include bacula::director::export
+
+    if tagged('monit') {
+        class { 'bacula::director::monit':
+            monitor_email => $monitor_email,
+        }
+    }
 
     if tagged('packetfilter') {
         class { 'bacula::director::packetfilter':

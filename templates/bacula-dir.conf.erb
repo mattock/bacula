@@ -135,8 +135,8 @@ Messages {
 #
   mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= fqdn %>\" -s \"Bacula: %t %e of %c %l\" %r"
   operatorcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= fqdn %>\" -s \"Bacula: Intervention needed for %j\" %r"
-  mail = <%= servermonitor %> = all, !skipped
-  operator = <%= servermonitor %> = mount
+  mail = <%= email %> = all, !skipped
+  operator = <%= email %> = mount
   console = all, !skipped, !saved
 
 # WARNING! the following will create a file that you must cycle from

@@ -13,7 +13,8 @@ class bacula::director::config
     $postgresql_auth_line,
     $bacula_db_password,
     $tls_enable,
-    $default_schedules
+    $default_schedules,
+    $email
     )
     {
 
