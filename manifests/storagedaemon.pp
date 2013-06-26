@@ -21,6 +21,9 @@
 #   Enable TLS. Defaults to 'no'.
 # [*use_puppet_certs*]
 #   Use puppet certs for TLS. Defaults to 'yes'.
+# [*monitor_email*]
+#   Email address where local service monitoring software sends it's reports to.
+#   Defaults to global variable $::servermonitor.
 #
 # == Examples
 #
@@ -52,7 +55,8 @@ class bacula::storagedaemon(
     $bind_address="",
     $backup_directory="/var/backups/bacula",
     $tls_enable="no",
-    $use_puppet_certs="yes"
+    $use_puppet_certs="yes",
+    $monitor_email=$::servermonitor
     )
 {
 
@@ -80,7 +84,9 @@ class bacula::storagedaemon(
     }
 
     if tagged('monit') {
-        include bacula::storagedaemon::monit
+        class { 'bacula::storagedaemon::monit':
+            monitor_email => $monitor_email,
+        }
     }
 
 }

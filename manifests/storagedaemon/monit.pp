@@ -3,7 +3,10 @@
 #
 # Setup monit rules for Bacula Storagedaemon
 #
-class bacula::storagedaemon::monit {
+class bacula::storagedaemon::monit(
+    $monitor_email
+)
+{
 
 	monit::fragment { 'bacula-bacula-sd.monit':
 		modulename => 'bacula',

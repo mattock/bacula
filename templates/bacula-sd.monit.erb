@@ -1,5 +1,5 @@
 # FIXME: This is probably fairly Debian/Ubuntu specific
-check process bacula-sd with pidfile /var/run/bacula/bacula-sd.9103.pid
-        start "/etc/init.d/bacula-sd start"
-        stop  "/etc/init.d/bacula-sd stop"
-
+check process bacula-sd with pidfile <%= scope.lookupvar('bacula::params::pid_directory') %>/bacula-sd.9103.pid
+        start "/etc/init.d/<%= scope.lookupvar('bacula::params::bacula_storagedaemon_service') %> start"
+        stop  "/etc/init.d/<%= scope.lookupvar('bacula::params::bacula_storagedaemon_service') %> stop"
+        alert <%= scope.lookupvar('bacula::storagedaemon::monit::monitor_email') %> with reminder on 480 cycles 
