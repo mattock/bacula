@@ -28,6 +28,9 @@
 #   An array containing "Run" lines for a Filedaemon-specific schedule. Defaults 
 #   to '' which means that the default Schedule called "default-schedule" 
 #   defined in the bacula::director class is used.
+# [*monitor_email*]
+#   Email address where local service monitoring software sends it's reports to.
+#   Defaults to global variable $::servermonitor.
 #
 # == Examples
 #
@@ -63,7 +66,8 @@ class bacula::filedaemon
     $tls_enable='no',
     $backup_files,
     $use_puppet_certs='yes',
-    $schedules=''
+    $schedules='',
+    $monitor_email=$::servermonitor
 )
 {
 
@@ -96,7 +100,9 @@ class bacula::filedaemon
     include bacula::filedaemon::export
 
     if tagged('monit') {
-        include bacula::filedaemon::monit
+        class { 'bacula::filedaemon::monit':
+            monitor_email => $monitor_email,
+        }
     }
 
 }

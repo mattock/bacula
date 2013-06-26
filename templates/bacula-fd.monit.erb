@@ -1,4 +1,5 @@
 check process bacula-fd with pidfile <%= scope.lookupvar('bacula::params::pid_directory') %>/bacula-fd.9102.pid
         start "/etc/init.d/bacula-fd start"
         stop  "/etc/init.d/bacula-fd stop"
+        alert <%= scope.lookupvar('bacula::filedaemon::monit::monitor_email') %> with reminder on 480 cycles
 
