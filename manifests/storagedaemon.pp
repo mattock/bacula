@@ -24,10 +24,11 @@
 # [*monitor_email*]
 #   Email address where local service monitoring software sends it's reports to.
 #   Defaults to global variable $::servermonitor.
-# [*allow_additional_ipv4_address*]
-#   Additional IPv4 address/network from where to allow connections. This is 
-#   useful in cases where some Filedaemons export an IP-address that is not the 
-#   source IP of their packages at the Storagedaemon end. Defaults to 'none'.
+# [*allow_additional_ipv4_addresses*]
+#   An array of additional IPv4 address/networks from where to allow 
+#   connections. This is useful in cases where some Filedaemons export an 
+#   IP-address that is not the source IP of their packages at the Storagedaemon 
+#   end. Defaults to 'none'.
 #
 # == Examples
 #
@@ -62,7 +63,7 @@ class bacula::storagedaemon
     $tls_enable="no",
     $use_puppet_certs="yes",
     $monitor_email=$::servermonitor,
-    $allow_additional_ipv4_address = 'none'
+    $allow_additional_ipv4_addresses = 'none'
 )
 {
 
@@ -87,7 +88,7 @@ class bacula::storagedaemon
 
     if tagged('packetfilter') {
         class { 'bacula::storagedaemon::packetfilter':
-            allow_additional_ipv4_address => $allow_additional_ipv4_address,
+            allow_additional_ipv4_addresses => $allow_additional_ipv4_addresses,
         }
     }
 
