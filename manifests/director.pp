@@ -33,6 +33,12 @@
 #   'Level=Full sun at 05:00',
 #   'Level=Incremental mon-sat at 05:00'
 #
+# [*volume_retention*]
+#   How long to retain volumes. Defaults to '365 days'.
+# [*max_volume_bytes*]
+#   Maximum volume size in bytes. Defaults to '5G'.
+# [*max_volumes*]
+#   Maximum number of volumes. Defaults to 100.
 # [*email*]
 #   Email address where Bacula's internal notifications are sent. Defaults to 
 #   global variable $::servermonitor.
@@ -54,6 +60,8 @@
 #     tls_enable => 'yes',
 #     email => 'backups@domain.com',
 #     monitor_email => 'monit@domain.com',
+#     max_volume_bytes => '5G',
+#     max_volumes => 200,
 #   }
 #
 # == Authors
@@ -79,6 +87,9 @@ class bacula::director(
     $use_puppet_certs='yes',
     $default_schedules = ['Level=Full sun at 05:00',
                           'Level=Incremental mon-sat at 05:00'],
+    $volume_retention = '365 days',
+    $max_volume_bytes = '5G',
+    $max_volumes = 100,
     $email = $::servermonitor,
     $monitor_email = $::servermonitor
 )
@@ -102,6 +113,9 @@ class bacula::director(
         tls_enable => $tls_enable,
         default_schedules => $default_schedules,
         email => $email,
+        volume_retention => $volume_retention,
+        max_volume_bytes => $max_volume_bytes,
+        max_volumes => $max_volumes,
     }
 
     include bacula::director::service

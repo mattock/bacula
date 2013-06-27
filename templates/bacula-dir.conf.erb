@@ -84,7 +84,7 @@ FileSet {
     Options {
       signature = MD5
     }
-    File = "/var/lib/bacula/XXX_DBNAME_XXX.sql"
+    File = "/var/lib/bacula/bacula.sql"
   }
 }
 
@@ -164,9 +164,10 @@ Pool {
   Pool Type = Backup
   Recycle = yes                       # Bacula can automatically recycle Volumes
   AutoPrune = yes                     # Prune expired volumes
-  Volume Retention = 365 days         # one year
-  Maximum Volume Bytes = 50G          # Limit Volume size to something reasonable
-  Maximum Volumes = 100               # Limit number of Volumes in Pool
+  Volume Retention = <%= volume_retention %>
+  Maximum Volume Bytes = <%= max_volume_bytes %>
+  Maximum Volumes = <%= max_volumes %>
+  LabelFormat = "Vol"
 }
 
 #

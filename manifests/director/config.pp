@@ -4,7 +4,7 @@
 # Configure bacula director
 #
 class bacula::director::config
-    (
+(
     $bind_address,
     $pwd_for_console,
     $pwd_for_monitor,
@@ -14,9 +14,12 @@ class bacula::director::config
     $bacula_db_password,
     $tls_enable,
     $default_schedules,
+    $volume_retention,
+    $max_volume_bytes,
+    $max_volumes,
     $email
-    )
-    {
+)
+{
 
     class { 'bacula::director::config::postgresql':
         postgresql_auth_line => $postgresql_auth_line,
