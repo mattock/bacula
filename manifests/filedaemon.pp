@@ -8,6 +8,10 @@
 #
 # == Parameters
 #
+# [*director_address_ipv4*]
+#   IP-address for incoming Bacula Director packets. Defaults to 'auto', which 
+#   means that the IP-address exported by the Director is used. In most cases 
+#   this works, but when it doesn't, this parameter allow manual override.
 # [*director_name*]
 #   Name of the Director allowed to contact this filedaemon
 # [*monitor_name*]
@@ -58,6 +62,7 @@
 #
 class bacula::filedaemon
 (
+    $director_address_ipv4='auto',
     $director_name,
     $monitor_name,
     $pwd_for_director,
@@ -92,7 +97,9 @@ class bacula::filedaemon
     include bacula::filedaemon::service
 
     if tagged('packetfilter') {
-        include bacula::filedaemon::packetfilter
+        class { 'bacula::filedaemon::packetfilter':
+            director_address_ipv4 => $director_address_ipv4,
+        }
     }
 
     # This class will have to be included, or this node won't be able to export 

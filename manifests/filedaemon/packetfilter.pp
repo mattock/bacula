@@ -3,10 +3,24 @@
 #
 # Configure packet filtering rules for Bacula Filedaemon
 # 
-class bacula::filedaemon::packetfilter {
+class bacula::filedaemon::packetfilter($director_address_ipv4) {
 
     # Allow bacula director to contact this filedaemon. This is only done if 
     # Puppet is managing the packet filtering rules.
-    Firewall <<| tag == 'bacula-director-to-filedaemon' |>>
+    #
+    # By default we use whatever IP-address the Director exported. If a custom 
+    # IP-address has been defined, we use that instead.
+    if $director_address_ipv4 == 'auto' {
+        Firewall <<| tag == 'bacula-director-to-filedaemon' |>>
 
+    } else {
+        firewall { "012 ipv4 accept bacula filedaemon port from $director_address_ipv4":
+            provider => 'iptables',
+            chain => 'INPUT',
+            proto => 'tcp',
+            port => 9102,
+            source => "$director_address_ipv4",
+            action => 'accept',
+        }
+    }
 }
