@@ -3,6 +3,8 @@
 #
 # Setup Bacula Storagedaemon.
 #
+# FIXME: add support for creating $backup_directory with correct permissions.
+#
 # == Parameters
 #
 # [*director_name*]

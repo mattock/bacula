@@ -1,7 +1,11 @@
 #
 # == Class: bacula::director
 #
-# Setup Bacula Director daemon
+# Setup Bacula Director daemon.
+#
+# FIXME: for some reason granting privileges to the postgresql database tables 
+# fails and has to be run manually. Tables are created without any issues. See 
+# bacula::director::config::postgresql for details.
 #
 # == Parameters
 #
