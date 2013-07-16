@@ -1,0 +1,19 @@
+#
+# Bacula User Agent (or Console) Configuration File
+#
+
+Director {
+  Name = <%= director_name %>
+  DIRport = 9101
+  Address = <%= director_address_ipv4 %>
+  Password = "<%= director_password %>"
+
+  <% if tls_enable == "yes" %>
+  TLS Enable = yes
+  TLS Require = yes
+  TLS Certificate = /etc/bacula/ssl/bacula.crt
+  TLS Key = /etc/bacula/ssl/bacula.key
+  TLS CA Certificate File = /etc/bacula/ssl/bacula-ca.crt
+  <% end %>
+}
+
