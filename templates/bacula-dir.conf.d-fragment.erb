@@ -5,7 +5,7 @@ Job {
   FileSet="Locally defined files at <%= fqdn %>"
   Schedule = <%= schedule_name %>
   Storage = File
-  Messages = Standard
+  Messages = <%= messages %>
   Pool = File
   Priority = 10
   Write Bootstrap = "/var/lib/bacula/%c.bsr"
@@ -19,7 +19,7 @@ Job {
   FileSet="Locally defined files at <%= fqdn %>"
   Storage = File
   Pool = File
-  Messages = Standard
+  Messages = <%= messages %>
   Where = /var/restore/bacula/<%= fqdn %>
 }
 

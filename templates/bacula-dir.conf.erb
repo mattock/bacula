@@ -50,7 +50,7 @@ Job {
   # This deletes the copy of the catalog
   RunAfterJob  = "/etc/bacula/scripts/delete_catalog_backup"
   Storage = File
-  Messages = Standard
+  Messages = All
   Pool = File
   Priority = 11                   # run after main backup
   Write Bootstrap = "/var/lib/bacula/%n.bsr"
@@ -120,7 +120,7 @@ Catalog {
 # Reasonable message delivery -- send most everything to email address
 #  and to the console
 Messages {
-  Name = Standard
+  Name = All
 #
 # NOTE! If you send to two email or more email addresses, you will need
 #  to replace the %r in the from field (-f part) with a single valid
@@ -147,6 +147,18 @@ Messages {
   catalog = all
 }
 
+#
+# Same as above but skip informational messages (e.g. Backup OK of...)
+Messages {
+  Name = AllButInformational
+  mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= fqdn %>\" -s \"Bacula: %t %e of %c %l\" %r"
+  operatorcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= fqdn %>\" -s \"Bacula: Intervention needed for %j\" %r"
+  mail = <%= email %> = all, !info, !skipped
+  operator = <%= email %> = mount
+  console = all, !skipped, !saved
+  append = "/var/lib/bacula/log" = all, !skipped
+  catalog = all
+}
 
 #
 # Message delivery for daemon messages (no job).

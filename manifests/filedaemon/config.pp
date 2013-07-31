@@ -12,7 +12,8 @@ class bacula::filedaemon::config
     $bind_address,
     $tls_enable,
     $backup_files,
-    $schedules
+    $schedules,
+    $messages
 )
 {
 

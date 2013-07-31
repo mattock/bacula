@@ -32,6 +32,10 @@
 #   An array containing "Run" lines for a Filedaemon-specific schedule. Defaults 
 #   to '' which means that the default Schedule called "default-schedule" 
 #   defined in the bacula::director class is used.
+# [*messages*]
+#   Which messages should be sent via email. Use "All" for (almost) all messages 
+#   and "AllButInformational" for everything except "Backup OK of <node>..." 
+#   messages and like. Defaults to "All".
 # [*monitor_email*]
 #   Email address where local service monitoring software sends it's reports to.
 #   Defaults to global variable $::servermonitor.
@@ -72,6 +76,7 @@ class bacula::filedaemon
     $backup_files,
     $use_puppet_certs='yes',
     $schedules='',
+    $messages='All',
     $monitor_email=$::servermonitor
 )
 {
@@ -92,6 +97,7 @@ class bacula::filedaemon
         tls_enable => $tls_enable,
         backup_files => $backup_files,
         schedules => $schedules,
+        messages => $messages,
     }
 
     include bacula::filedaemon::service
