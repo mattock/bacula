@@ -39,7 +39,10 @@ FileSet {
       signature = SHA1
       compression = GZIP
     }
-    @/etc/bacula-backup.list
+
+    <% backup_files.each do |backup_file| -%>
+    File = <%= backup_file %>
+    <% end -%>
   }
 }
 

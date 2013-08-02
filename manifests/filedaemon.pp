@@ -81,6 +81,9 @@ class bacula::filedaemon
 )
 {
 
+    # Remove obsolete configurations
+    include bacula::filedaemon::absent
+
     if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
         include bacula::puppetcerts
     }

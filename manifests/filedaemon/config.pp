@@ -48,12 +48,4 @@ class bacula::filedaemon::config
         tag => 'bacula-dir.conf.d-fragment',
     }
 
-    file { 'bacula-bacula-backup.list':
-        name => '/etc/bacula-backup.list',
-        content => template('bacula/bacula-backup.list.erb'),
-        owner => root,
-        group => bacula,
-        mode => 640,
-        require => Class['bacula::filedaemon::install'],
-    }
 }
