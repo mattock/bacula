@@ -81,6 +81,8 @@ class bacula::filedaemon
 )
 {
 
+if hiera('manage_bacula_filedaemon', 'true') != 'false' {
+
     # Remove obsolete configurations
     include bacula::filedaemon::absent
 
@@ -120,5 +122,5 @@ class bacula::filedaemon
             monitor_email => $monitor_email,
         }
     }
-
+}
 }

@@ -69,6 +69,8 @@ class bacula::storagedaemon
 )
 {
 
+if hiera('manage_bacula_storagedaemon', 'true') != 'false' {
+
     if ( $use_puppet_certs == "yes" ) and ( $tls_enable == "yes" ) {
         include bacula::puppetcerts
     }
@@ -99,5 +101,5 @@ class bacula::storagedaemon
             monitor_email => $monitor_email,
         }
     }
-
+}
 }

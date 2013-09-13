@@ -39,6 +39,8 @@ class bacula::console
 )
 {
 
+if hiera('manage_bacula_console', 'true') != 'false' {
+
     if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
         include bacula::puppetcerts
     }
@@ -52,4 +54,5 @@ class bacula::console
         director_password => $director_password,
         tls_enable => $tls_enable,
     }
+}
 }

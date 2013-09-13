@@ -99,6 +99,8 @@ class bacula::director(
 )
 {
 
+if hiera('manage_bacula_director', 'true') != 'false' {
+
     if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
         include bacula::puppetcerts
     }
@@ -139,4 +141,5 @@ class bacula::director(
             console_host => $console_host,
         }
     }
+}
 }
