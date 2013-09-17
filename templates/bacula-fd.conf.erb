@@ -18,9 +18,9 @@ Director {
   TLS Enable = yes
   TLS Require = yes
   TLS Verify Peer = yes
-  TLS Certificate = /etc/bacula/ssl/bacula.crt
-  TLS Key = /etc/bacula/ssl/bacula.key
-  TLS CA Certificate File = /etc/bacula/ssl/bacula-ca.crt
+  TLS Certificate = <%= scope.lookupvar('bacula::params::ssl_dir') %>/bacula.crt
+  TLS Key = <%= scope.lookupvar('bacula::params::ssl_dir') %>/bacula.key
+  TLS CA Certificate File = <%= scope.lookupvar('bacula::params::ssl_dir') %>/bacula-ca.crt
   <% end %>
 }
 
@@ -49,9 +49,9 @@ FileDaemon {                          # this is me
   <% if tls_enable == "yes" %>
   TLS Enable = yes
   TLS Require = yes
-  TLS Certificate = /etc/bacula/ssl/bacula.crt
-  TLS Key = /etc/bacula/ssl/bacula.key
-  TLS CA Certificate File = /etc/bacula/ssl/bacula-ca.crt
+  TLS Certificate = <%= scope.lookupvar('bacula::params::ssl_dir') %>/bacula.crt
+  TLS Key = <%= scope.lookupvar('bacula::params::ssl_dir') %>/bacula.key
+  TLS CA Certificate File = <%= scope.lookupvar('bacula::params::ssl_dir') %>/bacula-ca.crt
   <% end %>
 }
 

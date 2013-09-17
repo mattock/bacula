@@ -7,7 +7,6 @@ class bacula::filedaemon::monit(
     $monitor_email
 )
 {
-
 	monit::fragment { 'bacula-bacula-fd.monit':
 		modulename => 'bacula',
         basename => 'bacula-fd',

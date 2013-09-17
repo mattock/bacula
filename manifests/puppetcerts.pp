@@ -1,16 +1,18 @@
 #
 # == Class: bacula::puppetcerts
 #
-# Copy puppet certificates to a place where Bacula daemons can find them
+# Copy puppet certificates to a place where Bacula daemons can find them. Note 
+# that this class depends on puppetagent::params class for locating Puppet's SSL 
+# certificates.
 #
-class bacula::puppetcerts(
-    $puppet_ssl_dir = '/var/lib/puppet/ssl',
-    $bacula_ssl_dir = '/etc/bacula/ssl'
-)
-{
+class bacula::puppetcerts {
+
+    include bacula::params
+    include puppetagent::params
+
     file { 'bacula-ssl-dir':
         ensure => directory,
-        name => "$bacula_ssl_dir",
+        name => "${::bacula::params::ssl_dir}",
         owner => root,
         group => bacula,
         mode => 750,
@@ -18,28 +20,28 @@ class bacula::puppetcerts(
     }
 
     exec { 'copy-puppet-cert-to-bacula.crt':
-        command => "cp -f $puppet_ssl_dir/certs/$fqdn.pem $bacula_ssl_dir/bacula.crt",
-        unless => "cmp $puppet_ssl_dir/certs/$fqdn.pem $bacula_ssl_dir/bacula.crt",
+        command => "cp -f ${::puppetagent::params::ssl_dir}/certs/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.crt",
+        unless => "cmp ${::puppetagent::params::ssl_dir}/certs/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.crt",
         path => ['/bin', '/usr/bin/' ],
         require => File['bacula-ssl-dir'],
     }
 
     exec { 'copy-puppet-key-to-bacula.key':
-        command => "cp -f $puppet_ssl_dir/private_keys/$fqdn.pem $bacula_ssl_dir/bacula.key",
-        unless => "cmp $puppet_ssl_dir/private_keys/$fqdn.pem $bacula_ssl_dir/bacula.key",
+        command => "cp -f ${::puppetagent::params::ssl_dir}/private_keys/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.key",
+        unless => "cmp ${::puppetagent::params::ssl_dir}/private_keys/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.key",
         path => ['/bin', '/usr/bin/' ],
         require => File['bacula-ssl-dir'],
     }
 
     exec { 'copy-puppet-ca-cert-to-bacula-ca.crt':
-        command => "cp -f $puppet_ssl_dir/certs/ca.pem $bacula_ssl_dir/bacula-ca.crt",
-        unless => "cmp $puppet_ssl_dir/certs/ca.pem $bacula_ssl_dir/bacula-ca.crt",
+        command => "cp -f ${::puppetagent::params::ssl_dir}/certs/ca.pem ${::bacula::params::ssl_dir}/bacula-ca.crt",
+        unless => "cmp ${::puppetagent::params::ssl_dir}/certs/ca.pem ${::bacula::params::ssl_dir}/bacula-ca.crt",
         path => ['/bin', '/usr/bin/' ],
         require => File['bacula-ssl-dir'],
     }
 
     file { 'bacula.crt':
-        name => "$bacula_ssl_dir/bacula.crt",
+        name => "${::bacula::params::ssl_dir}/bacula.crt",
         owner => root,
         group => bacula,
         mode => 644,
@@ -47,7 +49,7 @@ class bacula::puppetcerts(
     }
 
     file { 'bacula.key':
-        name => "$bacula_ssl_dir/bacula.key",
+        name => "${::bacula::params::ssl_dir}/bacula.key",
         owner => root,
         group => bacula,
         mode => 640,
@@ -55,7 +57,7 @@ class bacula::puppetcerts(
     }
 
     file { 'bacula-ca.crt':
-        name => "$bacula_ssl_dir/bacula-ca.crt",
+        name => "$ssl_dir/bacula-ca.crt",
         owner => root,
         group => bacula,
         mode => 644,

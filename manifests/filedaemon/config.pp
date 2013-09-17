@@ -28,11 +28,11 @@ class bacula::filedaemon::config
     include bacula::params
 
     file { 'bacula-bacula-fd.conf':
-        name => '/etc/bacula/bacula-fd.conf',
+        name => "${::bacula::params::bacula_filedaemon_config}",
         content => template('bacula/bacula-fd.conf.erb'),
         mode => 640,
         owner => root,
-        group => root,
+        group => "${::bacula::params::admingroup}",
         require => Class['bacula::filedaemon::install'],
         notify => Class['bacula::filedaemon::service'],
     }
