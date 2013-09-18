@@ -57,7 +57,7 @@ class bacula::puppetcerts {
     }
 
     file { 'bacula-ca.crt':
-        name => "$ssl_dir/bacula-ca.crt",
+        name => "${::bacula::params::ssl_dir}/bacula-ca.crt",
         owner => root,
         group => bacula,
         mode => 644,
