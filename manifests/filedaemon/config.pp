@@ -25,6 +25,7 @@ class bacula::filedaemon::config
         $schedule_name = "${::fqdn}-schedule"
     }
 
+    include os::params
     include bacula::params
 
     file { 'bacula-bacula-fd.conf':
@@ -32,7 +33,7 @@ class bacula::filedaemon::config
         content => template('bacula/bacula-fd.conf.erb'),
         mode => 640,
         owner => root,
-        group => "${::bacula::params::admingroup}",
+        group => "${::os::params::admingroup}",
         require => Class['bacula::filedaemon::install'],
         notify => Class['bacula::filedaemon::service'],
     }

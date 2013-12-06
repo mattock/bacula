@@ -17,7 +17,6 @@ class bacula::params {
             $pid_directory = '/var/run'
             $working_directory = '/var/spool/bacula'
             $ssl_dir = '/etc/bacula/ssl'
-            $admingroup = 'root'
         }
         'Debian': {
             $bacula_director_package = 'bacula-director-pgsql'
@@ -30,7 +29,6 @@ class bacula::params {
             $pid_directory = '/var/run/bacula'
             $working_directory = '/var/lib/bacula'
             $ssl_dir = '/etc/bacula/ssl'
-            $admingroup = 'root'
         }
         'FreeBSD': {
             $bacula_filedaemon_package = 'bacula-client'
@@ -39,7 +37,6 @@ class bacula::params {
             $pid_directory = '/var/run'
             $working_directory = '/var/db/bacula'
             $ssl_dir = '/usr/local/etc/bacula/ssl'
-            $admingroup = 'wheel'
         }
         default: {
             $bacula_filedaemon_package = 'bacula-fd'
@@ -48,7 +45,6 @@ class bacula::params {
             $pid_directory = '/var/run/bacula'
             $working_directory = '/var/lib/bacula'
             $ssl_dir = '/etc/bacula/ssl'
-            $admingroup = 'root'
         }
     }
 }
