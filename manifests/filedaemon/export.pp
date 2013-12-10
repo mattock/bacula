@@ -14,14 +14,25 @@ class bacula::filedaemon::export {
     # bacula::director::packetfilter for details on the rationale.
     $ipv4_address = generate("/usr/local/bin/getip.sh", "-4", "$fqdn")
 
-    # Export IPv4 rules to the Storagedaemon node
-    @@firewall { "012 ipv4 accept bacula storagedaemon port from $ipv4_address":
-        provider => 'iptables',
-        chain => 'INPUT',
-        proto => 'tcp',
-        port => 9103,
-        source => "$ipv4_address",
-        action => 'accept',
-        tag => 'bacula-filedaemon-to-storagedaemon',
+    # Some nodes may not have a DNS A record, in which case the above query will 
+    # not return an IP-address. If that is the case, we do not export this 
+    # firewall resource in order to prevent Puppet run failures on the Bacula 
+    # Director node.
+    if $ipv4_address == '' {
+
+        # We no nothing
+
+    } else {
+
+        # Export IPv4 rules to the Storagedaemon node
+        @@firewall { "012 ipv4 accept bacula storagedaemon port from ${::fqdn}":
+            provider => 'iptables',
+            chain => 'INPUT',
+            proto => 'tcp',
+            port => 9103,
+            source => "$ipv4_address",
+            action => 'accept',
+            tag => 'bacula-filedaemon-to-storagedaemon',
+        }
     }
 }
