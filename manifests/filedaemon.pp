@@ -8,6 +8,12 @@
 #
 # == Parameters
 #
+# [*package_name*]
+#   Override the default package name obtained from params.pp. This is useful if 
+#   your operating system provides two different bacula-fd/bacula-client 
+#   versions under different names, e.g. for compatibility reasons. For example, 
+#   on FreeBSD 10 you need to set this parameter to 'bacula5-client' to be able 
+#   to connect to 5.2.x-based Directors and StorageDaemons.
 # [*director_address_ipv4*]
 #   IP-address for incoming Bacula Director packets. Defaults to 'auto', which 
 #   means that the IP-address exported by the Director is used. In most cases 
@@ -66,6 +72,7 @@
 #
 class bacula::filedaemon
 (
+    $package_name=$::bacula::params::bacula_filedaemon_package,
     $director_address_ipv4='auto',
     $director_name,
     $monitor_name,
@@ -78,7 +85,7 @@ class bacula::filedaemon
     $schedules='',
     $messages='All',
     $monitor_email=$::servermonitor
-)
+) inherits bacula::params
 {
 
 if hiera('manage_bacula_filedaemon', 'true') != 'false' {
@@ -91,7 +98,10 @@ if hiera('manage_bacula_filedaemon', 'true') != 'false' {
     }
 
     include bacula::common
-    include bacula::filedaemon::install
+
+    class { 'bacula::filedaemon::install':
+        package_name => $package_name,
+    }
 
     class { 'bacula::filedaemon::config':
         director_name => $director_name,

@@ -3,12 +3,14 @@
 #
 # Install Bacula Filedaemon
 #
-class bacula::filedaemon::install {
-
-    include bacula::params
+class bacula::filedaemon::install
+(
+    $package_name,
+) inherits bacula::params
+{
 
     package { 'bacula-filedaemon':
-        name => "${::bacula::params::bacula_filedaemon_package}",
+        name => "$package_name",
         ensure => installed,
         require => Class['bacula::common'],
     }

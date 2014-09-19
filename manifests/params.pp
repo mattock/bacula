@@ -51,14 +51,7 @@ class bacula::params {
             $bacula_filedaemon_service_stop = "/usr/local/etc/rc.d/${bacula_filedaemon_service} stop"
         }
         default: {
-            $bacula_filedaemon_package = 'bacula-fd'
-            $bacula_filedaemon_config = '/etc/bacula/bacula-fd.conf'
-            $bacula_filedaemon_service = 'bacula-fd'
-            $pid_directory = '/var/run/bacula'
-            $working_directory = '/var/lib/bacula'
-            $ssl_dir = '/etc/bacula/ssl'
-            $bacula_filedaemon_service_start = "/usr/sbin/service ${bacula_filedaemon_service} start"
-            $bacula_filedaemon_service_stop = "/usr/sbin/service ${bacula_filedaemon_service} stop"
+            fail("Unsupported operating system: ${::osfamily}/${::operatingsystem}")
         }
     }
 }
