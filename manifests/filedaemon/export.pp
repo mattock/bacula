@@ -8,7 +8,11 @@
 # makes puppet manage the firewall rules on _this_ node, which we don't always 
 # want.
 #
-class bacula::filedaemon::export {
+class bacula::filedaemon::export
+(
+    $status
+)
+{
 
     # Get this node's IP based on DNS query done on the puppetmaster. Look at 
     # bacula::director::packetfilter for details on the rationale.
@@ -26,6 +30,7 @@ class bacula::filedaemon::export {
 
         # Export IPv4 rules to the Storagedaemon node
         @@firewall { "012 ipv4 accept bacula storagedaemon port from ${::fqdn}":
+            ensure => $status,
             provider => 'iptables',
             chain => 'INPUT',
             proto => 'tcp',

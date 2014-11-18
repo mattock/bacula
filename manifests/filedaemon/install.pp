@@ -5,13 +5,14 @@
 #
 class bacula::filedaemon::install
 (
-    $package_name,
+    $status,
+    $package_name
 ) inherits bacula::params
 {
 
     package { 'bacula-filedaemon':
+        ensure => $status,
         name => "$package_name",
-        ensure => installed,
         require => Class['bacula::common'],
     }
 }

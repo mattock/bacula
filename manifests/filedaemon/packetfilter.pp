@@ -3,7 +3,12 @@
 #
 # Configure packet filtering rules for Bacula Filedaemon
 # 
-class bacula::filedaemon::packetfilter($director_address_ipv4) {
+class bacula::filedaemon::packetfilter
+(
+    $status,
+    $director_address_ipv4
+)
+{
 
     # Allow bacula director to contact this filedaemon. This is only done if 
     # Puppet is managing the packet filtering rules.
@@ -15,6 +20,7 @@ class bacula::filedaemon::packetfilter($director_address_ipv4) {
 
     } else {
         firewall { "012 ipv4 accept bacula filedaemon port from $director_address_ipv4":
+            ensure => $status,
             provider => 'iptables',
             chain => 'INPUT',
             proto => 'tcp',

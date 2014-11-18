@@ -5,6 +5,7 @@
 #
 class bacula::filedaemon::config
 (
+    $status,
     $director_name,
     $monitor_name,
     $pwd_for_director,
@@ -29,6 +30,7 @@ class bacula::filedaemon::config
     include bacula::params
 
     file { 'bacula-bacula-fd.conf':
+        ensure => $status,
         name => "${::bacula::params::bacula_filedaemon_config}",
         content => template('bacula/bacula-fd.conf.erb'),
         mode => 640,
@@ -40,6 +42,7 @@ class bacula::filedaemon::config
 
     # Export a Director configuration fragment from this node.
     @@file { "bacula-dir.conf.d-fragment-${fqdn}":
+        ensure => $status,
         name => "/etc/bacula/bacula-dir.conf.d/${fqdn}.conf",
         content => template('bacula/bacula-dir.conf.d-fragment.erb'),
         mode => 640,

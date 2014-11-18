@@ -8,6 +8,10 @@
 #
 # == Parameters
 #
+# [*status*]
+#   Status of the Bacula Filedaemon. Valid values are 'present' and 'absent'. 
+#   Default value is 'present'. This is primary useful when decommissioning 
+#   nodes to ensure that exported resources are cleaned up properly.
 # [*package_name*]
 #   Override the default package name obtained from params.pp. This is useful if 
 #   your operating system provides two different bacula-fd/bacula-client 
@@ -72,6 +76,7 @@
 #
 class bacula::filedaemon
 (
+    $status='present',
     $package_name=$::bacula::params::bacula_filedaemon_package,
     $director_address_ipv4='auto',
     $director_name,
@@ -100,10 +105,12 @@ if hiera('manage_bacula_filedaemon', 'true') != 'false' {
     include bacula::common
 
     class { 'bacula::filedaemon::install':
+        status => $status,
         package_name => $package_name,
     }
 
     class { 'bacula::filedaemon::config':
+        status => $status,
         director_name => $director_name,
         monitor_name => $monitor_name,
         pwd_for_director => $pwd_for_director,
@@ -119,16 +126,20 @@ if hiera('manage_bacula_filedaemon', 'true') != 'false' {
 
     if tagged('packetfilter') {
         class { 'bacula::filedaemon::packetfilter':
+            status => $status,
             director_address_ipv4 => $director_address_ipv4,
         }
     }
 
     # This class will have to be included, or this node won't be able to export 
     # firewall resources to the Bacula Storagedaemon
-    include bacula::filedaemon::export
+    class { 'bacula::filedaemon::export':
+        status => $status,
+    }
 
     if tagged('monit') {
         class { 'bacula::filedaemon::monit':
+            status => $status,
             monitor_email => $monitor_email,
         }
     }
