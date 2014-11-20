@@ -18,7 +18,7 @@
 #
 # == Examples
 #
-# include bacula::console
+#   include bacula::console
 #
 # == Authors
 #
@@ -26,8 +26,7 @@
 #
 # == License
 #
-# BSD-lisence
-# See file LICENSE for details
+# BSD-license. See file LICENSE for details.
 #
 class bacula::console
 (

@@ -35,24 +35,24 @@
 # == Examples
 #
 #   class { 'bacula::filedaemon':
-#     director_name => 'backup.domain.com-dir',
-#     monitor_name => 'management.domain.com-mon',
-#     pwd_for_director => 'password',
-#     pwd_for_monitor => 'password',
-#     backup_directory => '/backup',
-#     bind_address => '127.0.0.1',
-#     tls_enable => 'yes',
+#       director_name => 'backup.domain.com-dir',
+#       monitor_name => 'management.domain.com-mon',
+#       pwd_for_director => 'password',
+#       pwd_for_monitor => 'password',
+#       backup_directory => '/backup',
+#       bind_address => '127.0.0.1',
+#       tls_enable => 'yes',
 #   }
 #
 # == Authors
 #
 # Samuli Seppänen <samuli.seppanen@gmail.com>
+#
 # Samuli Seppänen <samuli@openvpn.net>
 #
 # == License
 #
-# BSD-lisence
-# See file LICENSE for details
+# BSD-license. See file LICENSE for details.
 #
 class bacula::storagedaemon
 (
