@@ -20,22 +20,22 @@ class bacula::puppetcerts {
     }
 
     exec { 'copy-puppet-cert-to-bacula.crt':
-        command => "cp -f ${::puppetagent::params::ssl_dir}/certs/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.crt",
-        unless => "cmp ${::puppetagent::params::ssl_dir}/certs/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.crt",
+        command => "cp -f ${::puppetagent::params::ssldir}/certs/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.crt",
+        unless => "cmp ${::puppetagent::params::ssldir}/certs/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.crt",
         path => ['/bin', '/usr/bin/' ],
         require => File['bacula-ssl-dir'],
     }
 
     exec { 'copy-puppet-key-to-bacula.key':
-        command => "cp -f ${::puppetagent::params::ssl_dir}/private_keys/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.key",
-        unless => "cmp ${::puppetagent::params::ssl_dir}/private_keys/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.key",
+        command => "cp -f ${::puppetagent::params::ssldir}/private_keys/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.key",
+        unless => "cmp ${::puppetagent::params::ssldir}/private_keys/$fqdn.pem ${::bacula::params::ssl_dir}/bacula.key",
         path => ['/bin', '/usr/bin/' ],
         require => File['bacula-ssl-dir'],
     }
 
     exec { 'copy-puppet-ca-cert-to-bacula-ca.crt':
-        command => "cp -f ${::puppetagent::params::ssl_dir}/certs/ca.pem ${::bacula::params::ssl_dir}/bacula-ca.crt",
-        unless => "cmp ${::puppetagent::params::ssl_dir}/certs/ca.pem ${::bacula::params::ssl_dir}/bacula-ca.crt",
+        command => "cp -f ${::puppetagent::params::ssldir}/certs/ca.pem ${::bacula::params::ssl_dir}/bacula-ca.crt",
+        unless => "cmp ${::puppetagent::params::ssldir}/certs/ca.pem ${::bacula::params::ssl_dir}/bacula-ca.crt",
         path => ['/bin', '/usr/bin/' ],
         require => File['bacula-ssl-dir'],
     }
