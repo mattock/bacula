@@ -17,6 +17,12 @@ class bacula::director::config::postgresql
         basename => 'bacula-director',
     }
 
+    # FIXME: neither of the two following Execs seem to get run during initial 
+    # install. The reason could be the "refreshonly" parameter: the first Puppet 
+    # run almost never works, and if the Execs are loaded then, they will not be 
+    # loaded again later, when they could actually do some good. At this point 
+    # this is just pure speculation, but the problem itself has been encountered 
+    # on every Bacula install so far.
     exec { 'bacula-make_postgresql_tables':
         environment => [ 'db_name=bacula' ],
         command => '/usr/share/bacula-director/make_postgresql_tables',
@@ -27,8 +33,6 @@ class bacula::director::config::postgresql
         require => Postgresql::Loadsql['bacula-bacula-director.sql'],
     }
 
-    # FIXME: apparently this does not get run during initial install. Add tests
-    # to determine if the database privileges are in place already.
     exec { 'bacula-grant_postgresql_privileges':
         environment => [ 'db_name=bacula', 'db_user=baculauser' ],
         command => '/usr/share/bacula-director/grant_postgresql_privileges',
