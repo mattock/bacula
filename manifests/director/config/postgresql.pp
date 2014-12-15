@@ -59,5 +59,6 @@ class bacula::director::config::postgresql
         # Without "onlyif" every Puppet run would generate a new authentication 
         # line to pg_hba.conf.
         onlyif => "match *[user = 'baculauser'] size == 0",
+        notify => Class['postgresql::service'],
     }
 }
