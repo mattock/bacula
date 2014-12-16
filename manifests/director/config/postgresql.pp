@@ -10,6 +10,7 @@ class bacula::director::config::postgresql
     $bacula_db_password
 )
 {
+    include postgresql::params
 
     # Prepare postgresql for Bacula's own database schema scripts
     postgresql::loadsql { 'bacula-bacula-director.sql':
@@ -46,7 +47,7 @@ class bacula::director::config::postgresql
     # Add an authentication line for baculauser to postgresql pg_hba.conf. For 
     # details look into postgresql::config class.
     augeas { 'bacula-director-pg_hba.conf':
-        context => '/files/etc/postgresql/9.3/main/pg_hba.conf',
+        context => "/files${::postgresql::params::pg_hba_conf}",
         changes => [
             "ins 0434 after 1",
             "set 0434/type local",
@@ -55,7 +56,7 @@ class bacula::director::config::postgresql
             "set 0434/method password"
         ],
         lens => 'Pg_hba.lns',
-        incl => '/etc/postgresql/9.3/main/pg_hba.conf',
+        incl => "${::postgresql::params::pg_hba_conf}",
         # Without "onlyif" every Puppet run would generate a new authentication 
         # line to pg_hba.conf.
         onlyif => "match *[user = 'baculauser'] size == 0",
