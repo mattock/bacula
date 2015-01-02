@@ -3,7 +3,7 @@
   "version": "0.5.0",
   "author": "Puppet-Finland team",
   "license": "BSD license",
-  "summary": "Setup Bacula Directors, StorageDaemons and FileDaemons"
+  "summary": "Setup Bacula Directors, StorageDaemons and FileDaemons",
   "source": "https://github.com/Puppet-Finland/bacula.git",
   "project_page": "https://github.com/Puppet-Finland/bacula",
   "dependencies": [
