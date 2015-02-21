@@ -3,13 +3,22 @@
 #
 # Enable Bacula Filedaemon at boot
 #
-class bacula::filedaemon::service {
+class bacula::filedaemon::service
+(
+    $ensure
 
-    include bacula::params
+) inherits bacula::params
+{
+
+    # Service should be disabled if Bacula Filedaemon should be absent
+    $enable = $ensure ? {
+        'present' => true,
+        'absent' => false
+    }
 
     service { 'bacula-filedaemon':
         name => "${::bacula::params::bacula_filedaemon_service}",
-        enable => true,
+        enable => $enable,
         require => Class['bacula::filedaemon::config'],
     }
 }
