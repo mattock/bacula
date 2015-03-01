@@ -46,6 +46,13 @@ class bacula::director::config
         require => Class['bacula::director::install'],
     }
 
+    # Make the delete_catalog_backup script executable
+    file { 'bacula-delete_catalog_backup':
+        name => '/etc/bacula/scripts/delete_catalog_backup',
+        mode => 755,
+        require => Class['bacula::director::install'],
+    }
+
     # Import exported configuration fragments from clients
     File <<| tag == 'bacula-dir.conf.d-fragment' |>>
 }
