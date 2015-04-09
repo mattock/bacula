@@ -1,3 +1,5 @@
+### THIS FILE IS MANAGED BY PUPPET. ANY MANUAL CHANGES WILL GET OVERWRITTEN.
+
 check process bacula-fd with pidfile <%= scope.lookupvar('bacula::params::pid_directory') %>/bacula-fd.9102.pid
         start "<%= scope.lookupvar('bacula::params::bacula_filedaemon_service_start') %>"
         stop  "<%= scope.lookupvar('bacula::params::bacula_filedaemon_service_stop') %>"
