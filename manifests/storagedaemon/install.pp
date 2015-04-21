@@ -6,11 +6,11 @@
 #
 class bacula::storagedaemon::install {
 
-    include bacula::params
+    include ::bacula::params
 
     package { 'bacula-storagedaemon':
-        name => $::bacula::params::bacula_storagedaemon_package,
-        ensure => installed,
+        ensure  => installed,
+        name    => $::bacula::params::bacula_storagedaemon_package,
         require => Class['bacula::common'],
     }
 }

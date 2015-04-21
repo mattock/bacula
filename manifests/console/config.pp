@@ -12,11 +12,11 @@ class bacula::console::config
 )
 {
     file { 'bacula-bconsole.conf':
-        name => '/etc/bacula/bconsole.conf',
+        name    => '/etc/bacula/bconsole.conf',
         content => template('bacula/bconsole.conf.erb'),
-        mode => 640,
-        owner => root,
-        group => root,
+        mode    => '0640',
+        owner   => root,
+        group   => root,
         require => Class['bacula::console::install'],
     }
 }

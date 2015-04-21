@@ -99,45 +99,45 @@ class bacula::director(
 )
 {
 
-if hiera('manage_bacula_director', 'true') != 'false' {
+if hiera('manage_bacula_director', true) != false {
 
     if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
-        include bacula::puppetcerts
+        include ::bacula::puppetcerts
     }
 
-    include bacula::common
-    include bacula::director::install
+    include ::bacula::common
+    include ::bacula::director::install
 
-    class { 'bacula::director::config':
-        bind_address => $bind_address,
-        pwd_for_console => $pwd_for_console,
-        pwd_for_monitor => $pwd_for_monitor,
-        sd_host => $sd_host,
-        sd_password => $sd_password,
+    class { '::bacula::director::config':
+        bind_address         => $bind_address,
+        pwd_for_console      => $pwd_for_console,
+        pwd_for_monitor      => $pwd_for_monitor,
+        sd_host              => $sd_host,
+        sd_password          => $sd_password,
         postgresql_auth_line => $postgresql_auth_line,
-        bacula_db_password => $bacula_db_password,
-        tls_enable => $tls_enable,
-        default_schedules => $default_schedules,
-        email => $email,
-        volume_retention => $volume_retention,
-        max_volume_bytes => $max_volume_bytes,
-        max_volumes => $max_volumes,
+        bacula_db_password   => $bacula_db_password,
+        tls_enable           => $tls_enable,
+        default_schedules    => $default_schedules,
+        email                => $email,
+        volume_retention     => $volume_retention,
+        max_volume_bytes     => $max_volume_bytes,
+        max_volumes          => $max_volumes,
     }
 
-    include bacula::director::service
+    include ::bacula::director::service
 
     # This class will have to be included, or this node won't be able to export 
     # firewall resources to the Bacula Filedaemons and the Storagedaemon
-    include bacula::director::export
+    include ::bacula::director::export
 
     if tagged('monit') {
-        class { 'bacula::director::monit':
+        class { '::bacula::director::monit':
             monitor_email => $monitor_email,
         }
     }
 
     if tagged('packetfilter') {
-        class { 'bacula::director::packetfilter':
+        class { '::bacula::director::packetfilter':
             console_host => $console_host,
         }
     }

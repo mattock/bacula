@@ -5,14 +5,17 @@
 # Filedaemons. Used to configure what directories to backup in each filedaemon 
 # node, instead of in a static fashion in the Director configuration.
 #
-define bacula::director::config::fragment($fd_password)
+define bacula::director::config::fragment
+(
+    $fd_password
+)
 {
-    @@file { "bacula-dir.conf.d-fragment-${fqdn}":
-        name => "/etc/bacula/bacula-dir.conf.d/${fqdn}.conf",
+    @@file { "bacula-dir.conf.d-fragment-${::fqdn}":
+        name    => "/etc/bacula/bacula-dir.conf.d/${::fqdn}.conf",
         content => template('bacula/bacula-dir.conf.d-fragment.erb'),
-        mode => 640,
-        owner => root,
-        group => bacula,
-        tag => 'bacula-dir.conf.d-fragment',
+        mode    => '0640',
+        owner   => root,
+        group   => bacula,
+        tag     => 'bacula-dir.conf.d-fragment',
     }
 }

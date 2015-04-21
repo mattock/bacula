@@ -5,11 +5,11 @@
 #
 class bacula::storagedaemon::service {
 
-    include bacula::params
+    include ::bacula::params
 
     service { 'bacula-storagedaemon':
-        name => $::bacula::params::bacula_storagedaemon_service,
-        enable => true,
+        name    => $::bacula::params::bacula_storagedaemon_service,
+        enable  => true,
         require => Class['bacula::storagedaemon::config'],
     }
 }

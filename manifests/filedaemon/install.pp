@@ -11,8 +11,8 @@ class bacula::filedaemon::install
 {
 
     package { 'bacula-filedaemon':
-        ensure => $status,
-        name => "$package_name",
+        ensure  => $status,
+        name    => $package_name,
         require => Class['bacula::common'],
     }
 }

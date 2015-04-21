@@ -5,8 +5,8 @@
 #
 class bacula::console::install {
     package { 'bacula-console':
-        name => 'bacula-console',
-        ensure => installed,
+        ensure  => installed,
+        name    => 'bacula-console',
         require => Class['bacula::common'],
     }
 }

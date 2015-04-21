@@ -11,7 +11,7 @@ class bacula::filedaemon::absent {
     # bacula::filedaemon that populates this file is basically useless, and we 
     # need to get rid of it.
     file { 'bacula-bacula-backup.list':
-        name => '/etc/bacula-backup.list',
         ensure => absent,
+        name   => '/etc/bacula-backup.list',
     }
 }

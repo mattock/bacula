@@ -15,23 +15,24 @@ class bacula::storagedaemon::config
 )
 {
 
-    include bacula::params
+    include ::bacula::params
 
     file { 'bacula-backup-directory':
-        name => $backup_directory,
         ensure => directory,
-        owner => "${::bacula::params::bacula_storagedaemon_user}",
-        group => "${::bacula::params::bacula_storagedaemon_group}",
-        mode => 755,
+        name   => $backup_directory,
+        owner  => $::bacula::params::bacula_storagedaemon_user,
+        group  => $::bacula::params::bacula_storagedaemon_group,
+        mode   => '0755',
     }
 
     file { 'bacula-bacula-sd.conf':
-        name => '/etc/bacula/bacula-sd.conf',
+        ensure  => present,
+        name    => '/etc/bacula/bacula-sd.conf',
         content => template('bacula/bacula-sd.conf.erb'),
-        mode => 640,
-        owner => root,
-        group => root,
-        notify => Class['bacula::storagedaemon::service'],
+        mode    => '0640',
+        owner   => root,
+        group   => root,
+        notify  => Class['bacula::storagedaemon::service'],
         require => File['bacula-backup-directory'],
     }
 

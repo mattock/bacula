@@ -1,11 +1,15 @@
 #
 # == Class: bacula::storagedaemon::packetfilter
 #
-# Configure packet filtering rules for Bacula Storagedaemon. This basically just 
-# pulls in all the exported Firewall resources from the Filedaemons and the 
-# Director and realizes them on the Storagedaemon node.
+# Configure packet filtering rules for Bacula Storagedaemon. This basically
+# just pulls in all the exported Firewall resources from the Filedaemons and
+# the Director and realizes them on the Storagedaemon node.
 #
-class bacula::storagedaemon::packetfilter($allow_additional_ipv4_addresses) {
+class bacula::storagedaemon::packetfilter
+(
+    $allow_additional_ipv4_addresses
+)
+{
 
     # Realize firewall rules exported by the Director and Filedaemons. See 
     # bacula::filedaemon::packetfilter for discussion on pros and cons of this 

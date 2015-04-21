@@ -17,8 +17,8 @@ class bacula::filedaemon::service
     }
 
     service { 'bacula-filedaemon':
-        name => "${::bacula::params::bacula_filedaemon_service}",
-        enable => $enable,
+        name    => $::bacula::params::bacula_filedaemon_service,
+        enable  => $enable,
         require => Class['bacula::filedaemon::config'],
     }
 }

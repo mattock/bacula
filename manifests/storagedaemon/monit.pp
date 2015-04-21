@@ -8,8 +8,8 @@ class bacula::storagedaemon::monit(
 )
 {
 
-	monit::fragment { 'bacula-bacula-sd.monit':
-		modulename => 'bacula',
-        basename => 'bacula-sd',
-	}
+  monit::fragment { 'bacula-bacula-sd.monit':
+    modulename => 'bacula',
+    basename   => 'bacula-sd',
+  }
 }

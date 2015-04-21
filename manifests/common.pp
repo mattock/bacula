@@ -5,7 +5,7 @@
 #
 class bacula::common {
 
-    class { 'bacula::common::install': }
+    class { '::bacula::common::install': }
 
 }
 

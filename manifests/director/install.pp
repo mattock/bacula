@@ -5,11 +5,11 @@
 #
 class bacula::director::install {
 
-    include bacula::params
+    include ::bacula::params
 
     package { 'bacula-director':
-        name => $::bacula::params::bacula_director_package,
-        ensure => installed,
+        ensure  => installed,
+        name    => $::bacula::params::bacula_director_package,
         require => Class['bacula::common'],
     }
 }

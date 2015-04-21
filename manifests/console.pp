@@ -38,20 +38,20 @@ class bacula::console
 )
 {
 
-if hiera('manage_bacula_console', 'true') != 'false' {
+if hiera('manage_bacula_console', true) != false {
 
     if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
-        include bacula::puppetcerts
+        include ::bacula::puppetcerts
     }
 
-    include bacula::common
-    include bacula::console::install
+    include ::bacula::common
+    include ::bacula::console::install
 
-    class { 'bacula::console::config':
-        director_name => $director_name,
+    class { '::bacula::console::config':
+        director_name         => $director_name,
         director_address_ipv4 => $director_address_ipv4,
-        director_password => $director_password,
-        tls_enable => $tls_enable,
+        director_password     => $director_password,
+        tls_enable            => $tls_enable,
     }
 }
 }

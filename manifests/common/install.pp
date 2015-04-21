@@ -8,8 +8,8 @@ class bacula::common::install {
     # FreeBSD does not have a separate bacula-common port
     if $::operatingsystem != 'FreeBSD' {
         package { 'bacula-bacula-common':
-            name => 'bacula-common',
             ensure => installed,
+            name   => 'bacula-common',
         }
     }
 }

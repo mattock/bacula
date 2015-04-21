@@ -60,44 +60,44 @@ class bacula::storagedaemon
     $monitor_name,
     $pwd_for_director,
     $pwd_for_monitor,
-    $bind_address="",
-    $backup_directory="/var/backups/bacula",
-    $tls_enable="no",
-    $use_puppet_certs="yes",
+    $bind_address=undef,
+    $backup_directory='/var/backups/bacula',
+    $tls_enable='no',
+    $use_puppet_certs='yes',
     $monitor_email=$::servermonitor,
     $allow_additional_ipv4_addresses = 'none'
 )
 {
 
-if hiera('manage_bacula_storagedaemon', 'true') != 'false' {
+if hiera('manage_bacula_storagedaemon', true) != false {
 
-    if ( $use_puppet_certs == "yes" ) and ( $tls_enable == "yes" ) {
-        include bacula::puppetcerts
+    if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
+        include ::bacula::puppetcerts
     }
 
-    include bacula::common
-    include bacula::storagedaemon::install
+    include ::bacula::common
+    include ::bacula::storagedaemon::install
 
-    class { "bacula::storagedaemon::config":
-        director_name => $director_name,
-        monitor_name => $monitor_name,
+    class { '::bacula::storagedaemon::config':
+        director_name    => $director_name,
+        monitor_name     => $monitor_name,
         pwd_for_director => $pwd_for_director,
-        pwd_for_monitor => $pwd_for_monitor,
-        bind_address => $bind_address,
+        pwd_for_monitor  => $pwd_for_monitor,
+        bind_address     => $bind_address,
         backup_directory => $backup_directory,
-        tls_enable => $tls_enable,
+        tls_enable       => $tls_enable,
     }
 
-    include bacula::storagedaemon::service
+    include ::bacula::storagedaemon::service
 
     if tagged('packetfilter') {
-        class { 'bacula::storagedaemon::packetfilter':
+        class { '::bacula::storagedaemon::packetfilter':
             allow_additional_ipv4_addresses => $allow_additional_ipv4_addresses,
         }
     }
 
     if tagged('monit') {
-        class { 'bacula::storagedaemon::monit':
+        class { '::bacula::storagedaemon::monit':
             monitor_email => $monitor_email,
         }
     }

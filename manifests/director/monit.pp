@@ -7,8 +7,8 @@ class bacula::director::monit(
     $monitor_email
 )
 {
-	monit::fragment { 'bacula-bacula-dir.monit':
+  monit::fragment { 'bacula-bacula-dir.monit':
         modulename => 'bacula',
-        basename => 'bacula-dir',
-	}
+        basename   => 'bacula-dir',
+  }
 }

@@ -12,26 +12,26 @@ class bacula::director::export
     # Get this node's IP based on DNS query done on the puppetmaster. The 
     # ipaddress fact is worthless on nodes with several active interfaces. 
     # Google "puppet facter ipaddress" for details.
-    $ipv4_address = generate('/usr/local/bin/getip.sh', '-4', "$fqdn")
+    $ipv4_address = generate('/usr/local/bin/getip.sh', '-4', $::fqdn)
 
     # IPv4 rules
-    @@firewall { "012 ipv4 accept bacula filedaemon port from $ipv4_address":
+    @@firewall { "012 ipv4 accept bacula filedaemon port from ${ipv4_address}":
         provider => 'iptables',
-        chain => 'INPUT',
-        proto => 'tcp',
-        port => 9102,
-        source => "$ipv4_address",
-        action => 'accept',       
-        tag => 'bacula-director-to-filedaemon',
+        chain    => 'INPUT',
+        proto    => 'tcp',
+        port     => 9102,
+        source   => $ipv4_address,
+        action   => 'accept',
+        tag      => 'bacula-director-to-filedaemon',
     }
 
-    @@firewall { "013 ipv4 accept bacula storagedaemon port from $ipv4_address":
+    @@firewall { "013 ipv4 accept bacula storagedaemon port from ${ipv4_address}":
         provider => 'iptables',
-        chain => 'INPUT',
-        proto => 'tcp',
-        port => 9103,
-        source => "$ipv4_address",
-        action => 'accept',       
-        tag => 'bacula-director-to-storagedaemon',
+        chain    => 'INPUT',
+        proto    => 'tcp',
+        port     => 9103,
+        source   => $ipv4_address,
+        action   => 'accept',
+        tag      => 'bacula-director-to-storagedaemon',
     }
 }

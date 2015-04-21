@@ -8,10 +8,10 @@ define bacula::storagedaemon::packetfilter::allow_ip() {
 
     firewall { "012 ipv4 accept bacula storagedaemon port from ${title}":
         provider => 'iptables',
-        chain => 'INPUT',
-        proto => 'tcp',
-        port => 9103,
-        source => "${title}",
-        action => 'accept',
+        chain    => 'INPUT',
+        proto    => 'tcp',
+        port     => 9103,
+        source   => $title,
+        action   => 'accept',
     }
 }
