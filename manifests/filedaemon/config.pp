@@ -24,10 +24,8 @@ class bacula::filedaemon::config
     # template loop.
     if $schedules {
         $schedule_name = "${::fqdn}-schedule"
-        $custom_schedules = $schedules
     } else {
         $schedule_name = 'default-schedule'
-        $custom_schedules = '#'
     }
 
     include ::os::params

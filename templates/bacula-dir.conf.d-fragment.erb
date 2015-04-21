@@ -26,8 +26,9 @@ Job {
 Schedule {
     # The "schedule_name" variable can't be used here, as "Name" must be unique
     Name = "<%= fqdn %>-schedule"
-<% custom_schedules.each do |entry| -%>
+<% if @schedules %><% schedules.each do |entry| -%>
     Run = <%= entry %>
+<% end -%>
 <% end -%>
 }
 
