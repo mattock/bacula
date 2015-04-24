@@ -10,7 +10,7 @@ class bacula::filedaemon::monit
 )
 {
   monit::fragment { 'bacula-bacula-fd.monit':
-        status     => $status,
+        ensure     => $status,
         modulename => 'bacula',
         basename   => 'bacula-fd',
   }
