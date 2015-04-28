@@ -9,6 +9,9 @@
 #
 # == Parameters
 #
+# [*manage*]
+#  Whether to manage Bacula Director with Puppet or not. Valid values are 'yes' 
+#  (default) and 'no'.
 # [*console_host*]
 #   Allow console connections from this IPv4 address. Defaults to 127.0.0.1
 # [*bind_address*]
@@ -79,6 +82,7 @@
 # BSD-license. See file LICENSE for details.
 #
 class bacula::director(
+    $manage = 'yes',
     $console_host='127.0.0.1',
     $bind_address='127.0.0.1',
     $pwd_for_console,
@@ -99,7 +103,7 @@ class bacula::director(
 )
 {
 
-if hiera('manage_bacula_director', true) != false {
+if $manage == 'yes' {
 
     if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
         include ::bacula::puppetcerts

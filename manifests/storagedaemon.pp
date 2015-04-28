@@ -7,6 +7,9 @@
 #
 # == Parameters
 #
+# [*manage*]
+#   Whether to manage Bacula Storagedaemon with Puppet or not. Valid values are 
+#   'yes' (default) and 'no'.
 # [*director_name*]
 #   Name of the Director allowed to contact this filedaemon
 # [*monitor_name*]
@@ -56,6 +59,7 @@
 #
 class bacula::storagedaemon
 (
+    $manage = 'yes',
     $director_name,
     $monitor_name,
     $pwd_for_director,
@@ -69,7 +73,7 @@ class bacula::storagedaemon
 )
 {
 
-if hiera('manage_bacula_storagedaemon', true) != false {
+if $manage == 'yes' {
 
     if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
         include ::bacula::puppetcerts
