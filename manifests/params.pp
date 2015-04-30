@@ -49,7 +49,7 @@ class bacula::params {
         }
     }
 
-    if $::has_systemd {
+    if str2bool($::has_systemd) {
         $bacula_filedaemon_service_start = "${::os::params::systemctl} start ${bacula_filedaemon_service}"
         $bacula_filedaemon_service_stop = "${::os::params::systemctl} stop ${bacula_filedaemon_service}"
     } else {
