@@ -13,6 +13,7 @@ class bacula::filedaemon::config
     $bind_address,
     $tls_enable,
     $backup_files,
+    $exclude_files,
     $schedules,
     $messages
 )
@@ -53,5 +54,4 @@ class bacula::filedaemon::config
         notify  => Class['bacula::director::service'],
         tag     => 'bacula-dir.conf.d-fragment',
     }
-
 }

@@ -44,7 +44,12 @@ FileSet {
     <% backup_files.each do |backup_file| -%>
     File = <%= backup_file %>
     <% end -%>
-  }
+  }<% if @exclude_files %>
+    Exclude {
+    <% exclude_files.each do |exclude_file| -%>
+    File = "<%= exclude_file %>"
+    <% end -%>  
+    }<% end %>
 }
 
 Client {

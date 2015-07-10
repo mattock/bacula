@@ -41,6 +41,9 @@
 #   Use puppet certs for TLS. Defaults to 'yes'.
 # [*backup_files*]
 #   An array containing the list of directories/files to backup
+# [*exclude_files*]
+#   An array containing a list of directories/files/wildcards to exclude from 
+#   backups. Defaults to undef.
 # [*schedules*]
 #   An array containing "Run" lines for a Filedaemon-specific schedule.
 #   Defaults to undef which means that the default Schedule called
@@ -90,6 +93,7 @@ class bacula::filedaemon
     $bind_address=undef,
     $tls_enable='no',
     $backup_files,
+    $exclude_files=undef,
     $use_puppet_certs='yes',
     $schedules=undef,
     $messages='All',
@@ -122,6 +126,7 @@ if $manage == 'yes' {
         bind_address     => $bind_address,
         tls_enable       => $tls_enable,
         backup_files     => $backup_files,
+        exclude_files    => $exclude_files,
         schedules        => $schedules,
         messages         => $messages,
     }
