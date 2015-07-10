@@ -177,6 +177,8 @@ Pool {
   Recycle = yes                       # Bacula can automatically recycle Volumes
   AutoPrune = yes                     # Prune expired volumes
   Volume Retention = <%= volume_retention %>
+  File Retention = <%= file_retention %>
+  Job Retention = <%= job_retention %>
   Maximum Volume Bytes = <%= max_volume_bytes %>
   Maximum Volumes = <%= max_volumes %>
   LabelFormat = "Vol"

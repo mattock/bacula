@@ -14,6 +14,8 @@ class bacula::director::config
     $bacula_db_password,
     $tls_enable,
     $default_schedules,
+    $file_retention,
+    $job_retention,
     $volume_retention,
     $max_volume_bytes,
     $max_volumes,

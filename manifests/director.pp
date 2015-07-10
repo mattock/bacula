@@ -40,6 +40,12 @@
 #   'Level=Full sun at 05:00',
 #   'Level=Incremental mon-sat at 05:00'
 #
+# [*file_retention*]
+#   How long to keep File records in the catalog. This affects the Pool resource 
+#   and overrides anything set in the client-specific configuration. Defaults to 
+#   '60 days'.
+# [*job_retention*]
+#   The same as File retention but for Jobs. Defaults to '180 days'.
 # [*volume_retention*]
 #   How long to retain volumes. Defaults to '365 days'.
 # [*max_volume_bytes*]
@@ -95,6 +101,8 @@ class bacula::director(
     $use_puppet_certs='yes',
     $default_schedules = ['Level=Full sun at 05:00',
                           'Level=Incremental mon-sat at 05:00'],
+    $file_retention = '60 days',
+    $job_retention = '180 days',
     $volume_retention = '365 days',
     $max_volume_bytes = '5G',
     $max_volumes = 100,
@@ -123,6 +131,8 @@ if $manage == 'yes' {
         tls_enable           => $tls_enable,
         default_schedules    => $default_schedules,
         email                => $email,
+        file_retention       => $file_retention,
+        job_retention        => $job_retention,
         volume_retention     => $volume_retention,
         max_volume_bytes     => $max_volume_bytes,
         max_volumes          => $max_volumes,
