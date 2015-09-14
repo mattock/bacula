@@ -13,15 +13,15 @@
 #
 
 Director {                            # define myself
-  Name = <%= fqdn %>-dir
+  Name = <%= @fqdn %>-dir
   DIRport = 9101                # where we listen for UA connections
   QueryFile = "/etc/bacula/scripts/query.sql"
   WorkingDirectory = "/var/lib/bacula"
   PidDirectory = "/var/run/bacula"
   Maximum Concurrent Jobs = 1
-  Password = "<%= pwd_for_console %>" # Console password
+  Password = "<%= @pwd_for_console %>" # Console password
   Messages = Daemon
-  DirAddress = <%= bind_address %>
+  DirAddress = <%= @bind_address %>
 
   <% if tls_enable == "yes" %>
   TLS Enable = yes 
@@ -54,7 +54,7 @@ Job {
   Pool = File
   Priority = 11                   # run after main backup
   Write Bootstrap = "/var/lib/bacula/%n.bsr"
-  Client = "<%= fqdn %>-fd"
+  Client = "<%= @fqdn %>-fd"
 }
 
 Schedule {
@@ -92,9 +92,9 @@ FileSet {
 Storage {
   Name = File
 # Do not use "localhost" here    
-  Address = <%= sd_host %>                # N.B. Use a fully qualified name here
+  Address = <%= @sd_host %>                # N.B. Use a fully qualified name here
   SDPort = 9103
-  Password = "<%= sd_password %>"
+  Password = "<%= @sd_password %>"
   Device = FileStorage
   Media Type = File
 
@@ -114,7 +114,7 @@ Catalog {
   Name = MyCatalog
 # Uncomment the following line if you want the dbi driver
 # dbdriver = "dbi:sqlite3"; dbaddress = 127.0.0.1; dbport =  
-  dbname = "bacula"; dbuser = "baculauser"; dbpassword = "<%= bacula_db_password %>"
+  dbname = "bacula"; dbuser = "baculauser"; dbpassword = "<%= @bacula_db_password %>"
 }
 
 # Reasonable message delivery -- send most everything to email address
@@ -133,10 +133,10 @@ Messages {
 #  tell (most) people that its coming from an automated source.
 
 #
-  mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= fqdn %>\" -s \"Bacula: %t %e of %c %l\" %r"
-  operatorcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= fqdn %>\" -s \"Bacula: Intervention needed for %j\" %r"
-  mail = <%= email %> = all, !skipped
-  operator = <%= email %> = mount
+  mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula: %t %e of %c %l\" %r"
+  operatorcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula: Intervention needed for %j\" %r"
+  mail = <%= @email %> = all, !skipped
+  operator = <%= @email %> = mount
   console = all, !skipped, !saved
 
 # WARNING! the following will create a file that you must cycle from
@@ -151,10 +151,10 @@ Messages {
 # Same as above but skip informational messages (e.g. Backup OK of...)
 Messages {
   Name = AllButInformational
-  mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= fqdn %>\" -s \"Bacula: %t %e of %c %l\" %r"
-  operatorcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= fqdn %>\" -s \"Bacula: Intervention needed for %j\" %r"
-  mail = <%= email %> = all, !info, !skipped
-  operator = <%= email %> = mount
+  mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula: %t %e of %c %l\" %r"
+  operatorcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula: Intervention needed for %j\" %r"
+  mail = <%= @email %> = all, !info, !skipped
+  operator = <%= @email %> = mount
   console = all, !skipped, !saved
   append = "/var/lib/bacula/log" = all, !skipped
   catalog = all
@@ -164,8 +164,8 @@ Messages {
 # Message delivery for daemon messages (no job).
 Messages {
   Name = Daemon
-  mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= fqdn %>\" -s \"Bacula daemon message\" %r"
-  mail = <%= servermonitor %> = all, !skipped
+  mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula daemon message\" %r"
+  mail = <%= @servermonitor %> = all, !skipped
   console = all, !skipped, !saved
   append = "/var/lib/bacula/log" = all, !skipped
 }
@@ -176,11 +176,11 @@ Pool {
   Pool Type = Backup
   Recycle = yes                       # Bacula can automatically recycle Volumes
   AutoPrune = yes                     # Prune expired volumes
-  Volume Retention = <%= volume_retention %>
-  File Retention = <%= file_retention %>
-  Job Retention = <%= job_retention %>
-  Maximum Volume Bytes = <%= max_volume_bytes %>
-  Maximum Volumes = <%= max_volumes %>
+  Volume Retention = <%= @volume_retention %>
+  File Retention = <%= @file_retention %>
+  Job Retention = <%= @job_retention %>
+  Maximum Volume Bytes = <%= @max_volume_bytes %>
+  Maximum Volumes = <%= @max_volumes %>
   LabelFormat = "Vol"
 }
 
@@ -188,7 +188,7 @@ Pool {
 # Restricted console used by tray-monitor to get the status of the director
 #
 Console {
-  Name = <%= fqdn %>-mon
-  Password = "<%= pwd_for_monitor %>"
+  Name = <%= @fqdn %>-mon
+  Password = "<%= @pwd_for_monitor %>"
   CommandACL = status, .status
 }

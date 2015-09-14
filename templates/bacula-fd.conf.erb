@@ -11,10 +11,10 @@
 # List Directors who are permitted to contact this File daemon
 #
 Director {
-  Name = <%= director_name %>
-  Password = "<%= pwd_for_director %>"
+  Name = <%= @director_name %>
+  Password = "<%= @pwd_for_director %>"
 
-  <% if tls_enable == "yes" %>
+  <% if @tls_enable == "yes" %>
   TLS Enable = yes
   TLS Require = yes
   TLS Verify Peer = yes
@@ -29,8 +29,8 @@ Director {
 #   status of the file daemon
 #
 Director {
-  Name = <%= monitor_name %>
-  Password = "<%= pwd_for_monitor %>"
+  Name = <%= @monitor_name %>
+  Password = "<%= @pwd_for_monitor %>"
   Monitor = yes
 }
 
@@ -38,15 +38,15 @@ Director {
 # "Global" File daemon configuration specifications
 #
 FileDaemon {                          # this is me
-  Name = <%= fqdn %>-fd
+  Name = <%= @fqdn %>-fd
   FDport = 9102                  # where we listen for the director
   WorkingDirectory = <%= scope.lookupvar('bacula::params::working_directory') %>
   Pid Directory = <%= scope.lookupvar('bacula::params::pid_directory') %>
 
   Maximum Concurrent Jobs = 20
-  FDAddress = <%= bind_address %>
+  FDAddress = <%= @bind_address %>
 
-  <% if tls_enable == "yes" %>
+  <% if @tls_enable == "yes" %>
   TLS Enable = yes
   TLS Require = yes
   TLS Certificate = <%= scope.lookupvar('bacula::params::ssl_dir') %>/bacula.crt
@@ -58,5 +58,5 @@ FileDaemon {                          # this is me
 # Send all messages except skipped files back to Director
 Messages {
   Name = All
-  director = <%= director_name %> = all, !skipped, !restored
+  director = <%= @director_name %> = all, !skipped, !restored
 }

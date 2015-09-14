@@ -11,12 +11,12 @@
 #
 
 Storage {                             # definition of myself
-  Name = <%= fqdn %>-sd
+  Name = <%= @fqdn %>-sd
   SDPort = 9103                  # Director's port      
   WorkingDirectory = "/var/lib/bacula"
   Pid Directory = "/var/run/bacula"
   Maximum Concurrent Jobs = 20
-  SDAddress = <%= bind_address %>
+  SDAddress = <%= @bind_address %>
 
   <% if tls_enable == "yes" %>
   TLS Enable = yes
@@ -31,8 +31,8 @@ Storage {                             # definition of myself
 # List Directors who are permitted to contact Storage daemon
 #
 Director {
-  Name = <%= director_name %>
-  Password = "<%= pwd_for_director %>"
+  Name = <%= @director_name %>
+  Password = "<%= @pwd_for_director %>"
 
   <% if tls_enable == "yes" %>
   TLS Enable = yes
@@ -49,8 +49,8 @@ Director {
 #   status of the storage daemon
 #
 Director {
-  Name = <%= monitor_name %>
-  Password = "<%= pwd_for_monitor %>"
+  Name = <%= @monitor_name %>
+  Password = "<%= @pwd_for_monitor %>"
   Monitor = yes
 }
 
@@ -70,7 +70,7 @@ Director {
 Device {
   Name = FileStorage
   Media Type = File
-  Archive Device = <%= backup_directory %>
+  Archive Device = <%= @backup_directory %>
   LabelMedia = yes;                   # lets Bacula label unlabeled media
   Random Access = Yes;
   AutomaticMount = yes;               # when device opened, read it
@@ -80,5 +80,5 @@ Device {
 
 Messages {
   Name = All
-  director = <%= director_name %> = all
+  director = <%= @director_name %> = all
 }
