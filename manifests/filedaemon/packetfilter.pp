@@ -25,7 +25,7 @@ class bacula::filedaemon::packetfilter
             provider => 'iptables',
             chain    => 'INPUT',
             proto    => 'tcp',
-            port     => 9102,
+            dport    => 9102,
             source   => $director_address_ipv4,
             action   => 'accept',
         }
