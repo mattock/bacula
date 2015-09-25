@@ -23,7 +23,7 @@ Director {                            # define myself
   Messages = Daemon
   DirAddress = <%= @bind_address %>
 
-  <% if tls_enable == "yes" %>
+  <% if @tls_enable == "yes" %>
   TLS Enable = yes 
   TLS Require = yes
   TLS Certificate = /etc/bacula/ssl/bacula.crt
@@ -59,7 +59,7 @@ Job {
 
 Schedule {
     Name = "default-schedule"
-<% default_schedules.each do |entry| -%>
+<% @default_schedules.each do |entry| -%>
     Run = <%= entry %>
 <% end -%>
 }
@@ -98,7 +98,7 @@ Storage {
   Device = FileStorage
   Media Type = File
 
-  <% if tls_enable == "yes" %>
+  <% if @tls_enable == "yes" %>
   TLS Enable = yes
   TLS Require = yes
   TLS Certificate = /etc/bacula/ssl/bacula.crt

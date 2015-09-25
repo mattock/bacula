@@ -8,7 +8,7 @@ Director {
   Address = <%= @director_address_ipv4 %>
   Password = "<%= @director_password %>"
 
-  <% if tls_enable == "yes" %>
+  <% if @tls_enable == "yes" %>
   TLS Enable = yes
   TLS Require = yes
   TLS Certificate = /etc/bacula/ssl/bacula.crt
