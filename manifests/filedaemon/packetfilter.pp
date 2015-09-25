@@ -19,8 +19,7 @@ class bacula::filedaemon::packetfilter
         Firewall <<| tag == 'bacula-director-to-filedaemon' |>>
 
     } else {
-        firewall { "012 ipv4 accept bacula filedaemon port from \
-                    ${director_address_ipv4}":
+        firewall { "012 ipv4 accept bacula filedaemon port from ${director_address_ipv4}":
             ensure   => $status,
             provider => 'iptables',
             chain    => 'INPUT',
