@@ -22,9 +22,7 @@
 #   on FreeBSD 10 you need to set this parameter to 'bacula5-client' to be able 
 #   to connect to 5.2.x-based Directors and StorageDaemons.
 # [*director_address_ipv4*]
-#   IP-address for incoming Bacula Director packets. Defaults to 'auto', which 
-#   means that the IP-address exported by the Director is used. In most cases 
-#   this works, but when it doesn't, this parameter allow manual override.
+#   IP-address for incoming Bacula Director packets.
 # [*director_name*]
 #   Name of the Director allowed to contact this filedaemon
 # [*monitor_name*]
@@ -65,6 +63,7 @@
 #     pwd_for_monitor => 'password',
 #     bind_address => '0.0.0.0',
 #     tls_enable => 'yes',
+#     director_address_ipv4 => '10.10.5.8',
 #     backup_files => [ '/etc', '/var/lib/puppet/ssl', '/var/backups/local' ],
 #     schedules => ['Level=Full sun at 01:00',
 #                   'Level=Incremental mon-sat at 01:00'],
@@ -85,7 +84,7 @@ class bacula::filedaemon
     $manage='yes',
     $status='present',
     $package_name=$::bacula::params::bacula_filedaemon_package,
-    $director_address_ipv4='auto',
+    $director_address_ipv4,
     $director_name,
     $monitor_name,
     $pwd_for_director,
@@ -140,12 +139,6 @@ if $manage == 'yes' {
             status                => $status,
             director_address_ipv4 => $director_address_ipv4,
         }
-    }
-
-    # This class will have to be included, or this node won't be able to export 
-    # firewall resources to the Bacula Storagedaemon
-    class { '::bacula::filedaemon::export':
-        status => $status,
     }
 
     if tagged('monit') {

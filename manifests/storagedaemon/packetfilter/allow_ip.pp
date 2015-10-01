@@ -10,7 +10,7 @@ define bacula::storagedaemon::packetfilter::allow_ip() {
         provider => 'iptables',
         chain    => 'INPUT',
         proto    => 'tcp',
-        port     => 9103,
+        dport    => 9103,
         source   => $title,
         action   => 'accept',
     }

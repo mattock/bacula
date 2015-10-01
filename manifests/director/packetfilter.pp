@@ -10,7 +10,7 @@ class bacula::director::packetfilter($console_host)
         provider => 'iptables',
         chain    => 'INPUT',
         proto    => 'tcp',
-        port     => 9101,
+        dport    => 9101,
         source   => $console_host,
         action   => 'accept',
     }

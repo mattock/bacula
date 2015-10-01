@@ -10,6 +10,8 @@
 # [*manage*]
 #   Whether to manage Bacula Storagedaemon with Puppet or not. Valid values are 
 #   'yes' (default) and 'no'.
+# [*director_address_ipv4*]
+#   IP-address for incoming Bacula Director packets.
 # [*director_name*]
 #   Name of the Director allowed to contact this filedaemon
 # [*monitor_name*]
@@ -29,16 +31,15 @@
 # [*monitor_email*]
 #   Email address where local service monitoring software sends it's reports to.
 #   Defaults to global variable $::servermonitor.
-# [*allow_additional_ipv4_addresses*]
-#   An array of additional IPv4 address/networks from where to allow 
-#   connections. This is useful in cases where some Filedaemons export an 
-#   IP-address that is not the source IP of their packages at the Storagedaemon 
-#   end. Defaults to 'none'.
+# [*filedaemon_addresses_ipv4*]
+#   An array of IPv4 address/networks from where to allow 
+#   Filedaemon connections to the Storagedaemon
 #
 # == Examples
 #
 #   class { 'bacula::filedaemon':
 #       director_name => 'backup.domain.com-dir',
+#       director_address_ipv4 => '10.10.5.8',
 #       monitor_name => 'management.domain.com-mon',
 #       pwd_for_director => 'password',
 #       pwd_for_monitor => 'password',
@@ -61,6 +62,7 @@ class bacula::storagedaemon
 (
     $manage = 'yes',
     $director_name,
+    $director_address_ipv4,
     $monitor_name,
     $pwd_for_director,
     $pwd_for_monitor,
@@ -69,7 +71,7 @@ class bacula::storagedaemon
     $tls_enable='no',
     $use_puppet_certs='yes',
     $monitor_email=$::servermonitor,
-    $allow_additional_ipv4_addresses = 'none'
+    $filedaemon_addresses_ipv4
 )
 {
 
@@ -96,7 +98,8 @@ if $manage == 'yes' {
 
     if tagged('packetfilter') {
         class { '::bacula::storagedaemon::packetfilter':
-            allow_additional_ipv4_addresses => $allow_additional_ipv4_addresses,
+            filedaemon_addresses_ipv4 => $filedaemon_addresses_ipv4,
+            director_address_ipv4     => $director_address_ipv4,
         }
     }
 
