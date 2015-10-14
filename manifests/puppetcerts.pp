@@ -10,13 +10,24 @@ class bacula::puppetcerts {
     include ::bacula::params
     include ::puppetagent::params
 
+    File {
+        owner   => $::os::params::adminuser,
+        group   => bacula,
+    }
+
+    file { 'bacula-conf-dir':
+        ensure  => directory,
+        name    => $::bacula::params::conf_dir,
+        group   => $::os::params::admingroup,
+        mode    => '0755',
+        require => Class['bacula::common'],
+    }
+
     file { 'bacula-ssl-dir':
         ensure  => directory,
         name    => $::bacula::params::ssl_dir,
-        owner   => root,
-        group   => bacula,
         mode    => '0750',
-        require => Class['bacula::common'],
+        require => File['bacula-conf-dir'],
     }
 
     exec { 'copy-puppet-cert-to-bacula.crt':
@@ -42,24 +53,18 @@ class bacula::puppetcerts {
 
     file { 'bacula.crt':
         name    => "${::bacula::params::ssl_dir}/bacula.crt",
-        owner   => root,
-        group   => bacula,
         mode    => '0644',
         require => Exec['copy-puppet-cert-to-bacula.crt'],
     }
 
     file { 'bacula.key':
         name    => "${::bacula::params::ssl_dir}/bacula.key",
-        owner   => root,
-        group   => bacula,
         mode    => '0640',
         require => Exec['copy-puppet-key-to-bacula.key'],
     }
 
     file { 'bacula-ca.crt':
         name    => "${::bacula::params::ssl_dir}/bacula-ca.crt",
-        owner   => root,
-        group   => bacula,
         mode    => '0644',
         require => Exec['copy-puppet-ca-cert-to-bacula-ca.crt'],
     }

@@ -20,7 +20,8 @@ class bacula::params {
             $bacula_storagedaemon_group = 'tape'
             $pid_directory = '/var/run'
             $working_directory = '/var/spool/bacula'
-            $ssl_dir = '/etc/bacula/ssl'
+            $conf_dir = '/etc/bacula'
+            $ssl_dir = "${conf_dir}/ssl"
         }
         'Debian': {
             $bacula_director_package = 'bacula-director-pgsql'
@@ -34,7 +35,8 @@ class bacula::params {
             $bacula_storagedaemon_group = 'tape'
             $pid_directory = '/var/run/bacula'
             $working_directory = '/var/lib/bacula'
-            $ssl_dir = '/etc/bacula/ssl'
+            $conf_dir = '/etc/bacula'
+            $ssl_dir = "${conf_dir}/ssl"
         }
         'FreeBSD': {
             $bacula_filedaemon_package = 'bacula-client'
@@ -42,7 +44,8 @@ class bacula::params {
             $bacula_filedaemon_service = 'bacula-fd'
             $pid_directory = '/var/run'
             $working_directory = '/var/db/bacula'
-            $ssl_dir = '/usr/local/etc/bacula/ssl'
+            $conf_dir = '/usr/local/etc/bacula'
+            $ssl_dir = "${conf_dir}/ssl"
         }
         default: {
             fail("Unsupported operating system: ${::osfamily}/${::operatingsystem}")
