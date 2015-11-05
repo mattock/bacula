@@ -9,8 +9,8 @@
 # == Parameters
 #
 # [*manage*]
-#   Manage Bacula Filedaemon using Puppet. Valid values 'yes' (default) and 
-#   'no'.
+#   Manage Bacula Filedaemon using Puppet. Valid values are true (default) and 
+#   false.
 # [*status*]
 #   Status of the Bacula Filedaemon. Valid values are 'present' and 'absent'. 
 #   Default value is 'present'. This is primary useful when decommissioning 
@@ -81,7 +81,7 @@
 #
 class bacula::filedaemon
 (
-    $manage='yes',
+    $manage=true,
     $status='present',
     $package_name=$::bacula::params::bacula_filedaemon_package,
     $director_address_ipv4,
@@ -100,7 +100,9 @@ class bacula::filedaemon
 ) inherits bacula::params
 {
 
-if $manage == 'yes' {
+validate_bool($manage)
+
+if $manage {
 
     # Remove obsolete configurations
     include ::bacula::filedaemon::absent
