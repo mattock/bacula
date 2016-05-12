@@ -19,13 +19,19 @@ class bacula::director::config
     $volume_retention,
     $max_volume_bytes,
     $max_volumes,
-    $email
+    $email,
+    $email_from
 )
 {
 
     class { '::bacula::director::config::postgresql':
         postgresql_auth_line => $postgresql_auth_line,
         bacula_db_password   => $bacula_db_password,
+    }
+
+    $l_email_from = $email_from ? {
+        undef   => "bacula@${::fqdn}",
+        default => $email_from,
     }
 
     file { 'bacula-bacula-dir.conf':

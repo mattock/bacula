@@ -55,6 +55,11 @@
 # [*email*]
 #   Email address where Bacula's internal notifications are sent. Defaults to 
 #   global variable $::servermonitor.
+# [*email_from*]
+#   Sender email address. Defaults to "bacula@${::fqdn}". You may need to 
+#   override this if your SMTP server rejects emails where From: address differs 
+#   from the email account name; this is known to happen with Office 365 email 
+#   servers.
 # [*monitor_email*]
 #   Email address where local service monitoring software sends it's reports to.
 #   Defaults to global variable $::servermonitor.
@@ -106,6 +111,7 @@ class bacula::director(
     $volume_retention = '365 days',
     $max_volume_bytes = '5G',
     $max_volumes = 100,
+    $email_from = undef,
     $email = $::servermonitor,
     $monitor_email = $::servermonitor
 )
@@ -131,6 +137,7 @@ if $manage == 'yes' {
         tls_enable           => $tls_enable,
         default_schedules    => $default_schedules,
         email                => $email,
+        email_from           => $email_from,
         file_retention       => $file_retention,
         job_retention        => $job_retention,
         volume_retention     => $volume_retention,
