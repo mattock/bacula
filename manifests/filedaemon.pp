@@ -12,9 +12,9 @@
 #   Manage Bacula Filedaemon using Puppet. Valid values are true (default) and 
 #   false.
 # [*manage_packetfilter*]
-#   Manage packet filtering rules. Valid values are true and false (default).
+#   Manage packet filtering rules. Valid values are true (default) and false.
 # [*manage_monit*]
-#   Manage monit rules. Valid values are true and false (default).
+#   Manage monit rules. Valid values are true (default) and false.
 # [*status*]
 #   Status of the Bacula Filedaemon. Valid values are 'present' and 'absent'. 
 #   Default value is 'present'. This is primary useful when decommissioning 
@@ -71,8 +71,8 @@
 class bacula::filedaemon
 (
     Boolean $manage = true,
-    Boolean $manage_packetfilter = false,
-    Boolean $manage_monit = false,
+    Boolean $manage_packetfilter = true,
+    Boolean $manage_monit = true,
             $status = 'present',
             $package_name = $::bacula::params::bacula_filedaemon_package,
             $director_address_ipv4,

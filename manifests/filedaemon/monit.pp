@@ -9,9 +9,10 @@ class bacula::filedaemon::monit
     $monitor_email
 )
 {
-  monit::fragment { 'bacula-bacula-fd.monit':
+  @monit::fragment { 'bacula-bacula-fd.monit':
         ensure     => $status,
         modulename => 'bacula',
         basename   => 'bacula-fd',
+        tag        => 'default',
   }
 }

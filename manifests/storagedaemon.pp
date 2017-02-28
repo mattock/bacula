@@ -11,9 +11,9 @@
 #   Whether to manage Bacula Storagedaemon with Puppet or not. Valid values are 
 #   true (default) and false.
 # [*manage_packetfilter*]
-#   Manage packet filtering rules. Valid values are true and false (default).
+#   Manage packet filtering rules. Valid values are true (default) and false.
 # [*manage_monit*]
-#   Manage monit rules. Valid values are true and false (default).
+#   Manage monit rules. Valid values are true (default) and false.
 # [*director_address_ipv4*]
 #   IP-address for incoming Bacula Director packets.
 # [*director_name*]
@@ -52,8 +52,8 @@
 class bacula::storagedaemon
 (
     Boolean $manage = true,
-    Boolean $manage_packetfilter = false,
-    Boolean $manage_monit = false,
+    Boolean $manage_packetfilter = true,
+    Boolean $manage_monit = true,
             $director_name,
             $director_address_ipv4,
             $monitor_name,

@@ -12,13 +12,14 @@ class bacula::storagedaemon::packetfilter
 )
 {
     # Allow the Director to contact this StorageDaemon
-    firewall { "013 ipv4 accept bacula storagedaemon port from ${director_address_ipv4}":
+    @firewall { "013 ipv4 accept bacula storagedaemon port from ${director_address_ipv4}":
         provider => 'iptables',
         chain    => 'INPUT',
         proto    => 'tcp',
         dport    => 9103,
         source   => $director_address_ipv4,
         action   => 'accept',
+        tag      => 'default',
     }
 
     # Allow Filedaemons to contact this StorageDaemon

@@ -13,9 +13,9 @@
 #  Whether to manage Bacula Director with Puppet or not. Valid values are true
 #  (default) and false.
 # [*manage_packetfilter*]
-#   Manage packet filtering rules. Valid values are true and false (default).
+#   Manage packet filtering rules. Valid values are true (default) and false.
 # [*manage_monit*]
-#   Manage monit rules. Valid values are true and false (default).
+#   Manage monit rules. Valid values are true (default) and false.
 # [*console_host*]
 #   Allow console connections from this IPv4 address. Defaults to 127.0.0.1
 # [*bind_address*]
@@ -81,8 +81,8 @@
 class bacula::director
 (
     Boolean $manage = true,
-    Boolean $manage_packetfilter = false,
-    Boolean $manage_monit = false,
+    Boolean $manage_packetfilter = true,
+    Boolean $manage_monit = true,
             $console_host = '127.0.0.1',
             $bind_address = '127.0.0.1',
             $pwd_for_console,
