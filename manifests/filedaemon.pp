@@ -11,6 +11,10 @@
 # [*manage*]
 #   Manage Bacula Filedaemon using Puppet. Valid values are true (default) and 
 #   false.
+# [*manage_packetfilter*]
+#   Manage packet filtering rules. Valid values are true and false (default).
+# [*manage_monit*]
+#   Manage monit rules. Valid values are true and false (default).
 # [*status*]
 #   Status of the Bacula Filedaemon. Valid values are 'present' and 'absent'. 
 #   Default value is 'present'. This is primary useful when decommissioning 
@@ -34,9 +38,9 @@
 # [*bind_address*]
 #   Bind to this IPv4 address. Undef by default.
 # [*tls_enable*]
-#   Enable TLS. Defaults to 'no'.
+#   Enable TLS. Valid values are true and false (default).
 # [*use_puppet_certs*]
-#   Use puppet certs for TLS. Defaults to 'yes'.
+#   Use puppet certs for TLS. Valid values are true (default) and false.
 # [*backup_files*]
 #   An array containing the list of directories/files to backup
 # [*exclude_files*]
@@ -54,21 +58,6 @@
 #   Email address where local service monitoring software sends it's reports to.
 #   Defaults to global variable $::servermonitor.
 #
-# == Examples
-#
-#   class { 'bacula::filedaemon':
-#     director_name => 'backup.domain.com-dir',
-#     monitor_name => 'management.domain.com-mon',
-#     pwd_for_director => 'password',
-#     pwd_for_monitor => 'password',
-#     bind_address => '0.0.0.0',
-#     tls_enable => 'yes',
-#     director_address_ipv4 => '10.10.5.8',
-#     backup_files => [ '/etc', '/var/lib/puppet/ssl', '/var/backups/local' ],
-#     schedules => ['Level=Full sun at 01:00',
-#                   'Level=Incremental mon-sat at 01:00'],
-#   }
-#
 # == Authors
 #
 # Samuli Seppänen <samuli.seppanen@gmail.com>
@@ -81,33 +70,34 @@
 #
 class bacula::filedaemon
 (
-    $manage=true,
-    $status='present',
-    $package_name=$::bacula::params::bacula_filedaemon_package,
-    $director_address_ipv4,
-    $director_name,
-    $monitor_name,
-    $pwd_for_director,
-    $pwd_for_monitor,
-    $bind_address=undef,
-    $tls_enable='no',
-    $backup_files,
-    $exclude_files=undef,
-    $use_puppet_certs='yes',
-    $schedules=undef,
-    $messages='All',
-    $monitor_email=$::servermonitor
+    Boolean $manage = true,
+    Boolean $manage_packetfilter = false,
+    Boolean $manage_monit = false,
+            $status = 'present',
+            $package_name = $::bacula::params::bacula_filedaemon_package,
+            $director_address_ipv4,
+            $director_name,
+            $monitor_name,
+            $pwd_for_director,
+            $pwd_for_monitor,
+            $bind_address=undef,
+            $tls_enable = false,
+            $backup_files,
+            $exclude_files = undef,
+            $use_puppet_certs = true,
+            $schedules = undef,
+            $messages = 'All',
+            $monitor_email = $::servermonitor
+
 ) inherits bacula::params
 {
-
-validate_bool($manage)
 
 if $manage {
 
     # Remove obsolete configurations
     include ::bacula::filedaemon::absent
 
-    if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
+    if ( $use_puppet_certs ) and ( $tls_enable ) {
         include ::bacula::puppetcerts
     }
 
@@ -136,14 +126,14 @@ if $manage {
         ensure => $status,
     }
 
-    if tagged('packetfilter') {
+    if $manage_packetfilter {
         class { '::bacula::filedaemon::packetfilter':
             status                => $status,
             director_address_ipv4 => $director_address_ipv4,
         }
     }
 
-    if tagged('monit') {
+    if $manage_monit {
         class { '::bacula::filedaemon::monit':
             status        => $status,
             monitor_email => $monitor_email,

@@ -9,7 +9,11 @@
 #
 # [*manage*]
 #   Whether to manage Bacula Storagedaemon with Puppet or not. Valid values are 
-#   'yes' (default) and 'no'.
+#   true (default) and false.
+# [*manage_packetfilter*]
+#   Manage packet filtering rules. Valid values are true and false (default).
+# [*manage_monit*]
+#   Manage monit rules. Valid values are true and false (default).
 # [*director_address_ipv4*]
 #   IP-address for incoming Bacula Director packets.
 # [*director_name*]
@@ -35,19 +39,6 @@
 #   An array of IPv4 address/networks from where to allow 
 #   Filedaemon connections to the Storagedaemon
 #
-# == Examples
-#
-#   class { 'bacula::filedaemon':
-#       director_name => 'backup.domain.com-dir',
-#       director_address_ipv4 => '10.10.5.8',
-#       monitor_name => 'management.domain.com-mon',
-#       pwd_for_director => 'password',
-#       pwd_for_monitor => 'password',
-#       backup_directory => '/backup',
-#       bind_address => '127.0.0.1',
-#       tls_enable => 'yes',
-#   }
-#
 # == Authors
 #
 # Samuli Seppänen <samuli.seppanen@gmail.com>
@@ -60,24 +51,26 @@
 #
 class bacula::storagedaemon
 (
-    $manage = 'yes',
-    $director_name,
-    $director_address_ipv4,
-    $monitor_name,
-    $pwd_for_director,
-    $pwd_for_monitor,
-    $bind_address=undef,
-    $backup_directory='/var/backups/bacula',
-    $tls_enable='no',
-    $use_puppet_certs='yes',
-    $monitor_email=$::servermonitor,
-    $filedaemon_addresses_ipv4
+    Boolean $manage = true,
+    Boolean $manage_packetfilter = false,
+    Boolean $manage_monit = false,
+            $director_name,
+            $director_address_ipv4,
+            $monitor_name,
+            $pwd_for_director,
+            $pwd_for_monitor,
+            $bind_address = undef,
+            $backup_directory = '/var/backups/bacula',
+            $tls_enable = false,
+            $use_puppet_certs = true,
+            $monitor_email = $::servermonitor,
+            $filedaemon_addresses_ipv4
 )
 {
 
-if $manage == 'yes' {
+if $manage {
 
-    if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
+    if ( $use_puppet_certs ) and ( $tls_enable ) {
         include ::bacula::puppetcerts
     }
 
@@ -96,14 +89,14 @@ if $manage == 'yes' {
 
     include ::bacula::storagedaemon::service
 
-    if tagged('packetfilter') {
+    if $manage_packetfilter {
         class { '::bacula::storagedaemon::packetfilter':
             filedaemon_addresses_ipv4 => $filedaemon_addresses_ipv4,
             director_address_ipv4     => $director_address_ipv4,
         }
     }
 
-    if tagged('monit') {
+    if $manage_monit {
         class { '::bacula::storagedaemon::monit':
             monitor_email => $monitor_email,
         }
