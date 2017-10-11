@@ -12,6 +12,9 @@
 # [*manage*]
 #  Whether to manage Bacula Director with Puppet or not. Valid values are true
 #  (default) and false.
+# [*manage_db*]
+#   Manage postgresql database. Valid values a true (default) and false. Set to 
+#   no if you're using puppetlabs/postgresql or some other postgresql module.
 # [*manage_packetfilter*]
 #   Manage packet filtering rules. Valid values are true (default) and false.
 # [*manage_monit*]
@@ -81,6 +84,7 @@
 class bacula::director
 (
     Boolean $manage = true,
+    Boolean $manage_db = true,
     Boolean $manage_packetfilter = true,
     Boolean $manage_monit = true,
             $console_host = '127.0.0.1',
@@ -116,6 +120,7 @@ if $manage {
     include ::bacula::director::install
 
     class { '::bacula::director::config':
+        manage_db            => $manage_db,
         bind_address         => $bind_address,
         pwd_for_console      => $pwd_for_console,
         pwd_for_monitor      => $pwd_for_monitor,
