@@ -12,6 +12,9 @@
 # [*manage*]
 #  Whether to manage Bacula Director with Puppet or not. Valid values are true
 #  (default) and false.
+# [*manage_db*]
+#   Manage postgresql database. Valid values a true (default) and false. Set to 
+#   no if you're using puppetlabs/postgresql or some other postgresql module.
 # [*manage_packetfilter*]
 #   Manage packet filtering rules. Valid values are true (default) and false.
 # [*manage_monit*]
@@ -33,9 +36,9 @@
 # [*bacula_db_password*]
 #   Password for the bacula database user
 # [*tls_enable*]
-#   Enable TLS. Defaults to 'no'.
+#   Enable TLS. Valid values are true and false (default).
 # [*use_puppet_certs*]
-#   Use puppet certs for TLS. Defaults to 'yes'.
+#   Use puppet certs for TLS. Valid values are true (default) and false.
 # [*default_schedules*]
 #   An array of "Run" lines to add to the default schedule used by Filedaemons.
 #   Each Filedaemon can override this schedule with their own using the
@@ -81,8 +84,11 @@
 class bacula::director
 (
     Boolean $manage = true,
+    Boolean $manage_db = true,
     Boolean $manage_packetfilter = true,
     Boolean $manage_monit = true,
+    Boolean $use_puppet_certs = true,
+    Boolean $tls_enable = false,
             $console_host = '127.0.0.1',
             $bind_address = '127.0.0.1',
             $pwd_for_console,
@@ -91,8 +97,6 @@ class bacula::director
             $sd_password,
             $postgresql_auth_line,
             $bacula_db_password,
-            $tls_enable = false,
-            $use_puppet_certs = true,
             $default_schedules = ['Level=Full sun at 05:00',
                                   'Level=Incremental mon-sat at 05:00'],
             $file_retention = '60 days',
@@ -116,6 +120,7 @@ if $manage {
     include ::bacula::director::install
 
     class { '::bacula::director::config':
+        manage_db            => $manage_db,
         bind_address         => $bind_address,
         pwd_for_console      => $pwd_for_console,
         pwd_for_monitor      => $pwd_for_monitor,

@@ -5,6 +5,7 @@
 #
 class bacula::director::config
 (
+    $manage_db,
     $bind_address,
     $pwd_for_console,
     $pwd_for_monitor,
@@ -24,9 +25,16 @@ class bacula::director::config
 )
 {
 
-    class { '::bacula::director::config::postgresql':
-        postgresql_auth_line => $postgresql_auth_line,
-        bacula_db_password   => $bacula_db_password,
+
+    if $manage_db {
+        class { '::postgresql':
+            monitor_email => $email,
+        }
+
+        class { '::bacula::director::config::postgresql':
+            postgresql_auth_line => $postgresql_auth_line,
+            bacula_db_password   => $bacula_db_password,
+        }
     }
 
     $l_email_from = $email_from ? {
