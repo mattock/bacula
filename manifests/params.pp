@@ -22,6 +22,7 @@ class bacula::params {
             $working_directory = '/var/spool/bacula'
             $conf_dir = '/etc/bacula'
             $ssl_dir = "${conf_dir}/ssl"
+            $query_file = '/etc/bacula/query.sql'
         }
         'Debian': {
             $bacula_director_package = 'bacula-director-pgsql'
@@ -37,6 +38,7 @@ class bacula::params {
             $working_directory = '/var/lib/bacula'
             $conf_dir = '/etc/bacula'
             $ssl_dir = "${conf_dir}/ssl"
+            $query_file = '/etc/bacula/scripts/query.sql'
         }
         'FreeBSD': {
             $bacula_filedaemon_package = 'bacula-client'

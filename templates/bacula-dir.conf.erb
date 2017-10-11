@@ -15,7 +15,7 @@
 Director {                            # define myself
   Name = <%= @fqdn %>-dir
   DIRport = 9101                # where we listen for UA connections
-  QueryFile = "/etc/bacula/scripts/query.sql"
+  QueryFile = "<%= scope.lookupvar('bacula::params::query_file') %>"
   WorkingDirectory = "/var/lib/bacula"
   PidDirectory = "/var/run/bacula"
   Maximum Concurrent Jobs = 1
