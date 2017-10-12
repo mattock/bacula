@@ -5,8 +5,8 @@
 # 
 class bacula::filedaemon::packetfilter
 (
-    $status,
-    $director_address_ipv4
+    Enum['present','absent'] $status,
+    String $director_address_ipv4
 )
 {
 

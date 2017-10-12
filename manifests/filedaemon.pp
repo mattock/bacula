@@ -70,10 +70,12 @@
 #
 class bacula::filedaemon
 (
+    Enum['present','absent'] $status = 'present',
     Boolean $manage = true,
     Boolean $manage_packetfilter = true,
     Boolean $manage_monit = true,
-            $status = 'present',
+    Boolean $use_puppet_certs = true,
+    Boolean $tls_enable = false,
             $package_name = $::bacula::params::bacula_filedaemon_package,
             $director_address_ipv4,
             $director_name,
@@ -81,10 +83,8 @@ class bacula::filedaemon
             $pwd_for_director,
             $pwd_for_monitor,
             $bind_address=undef,
-            $tls_enable = false,
             $backup_files,
             $exclude_files = undef,
-            $use_puppet_certs = true,
             $schedules = undef,
             $messages = 'All',
             $monitor_email = $::servermonitor
