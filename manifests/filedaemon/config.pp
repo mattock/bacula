@@ -5,17 +5,17 @@
 #
 class bacula::filedaemon::config
 (
-    $status,
-    $director_name,
-    $monitor_name,
-    $pwd_for_director,
-    $pwd_for_monitor,
-    $bind_address,
-    $tls_enable,
-    $backup_files,
-    $exclude_files,
-    $schedules,
-    $messages
+    Enum['present','absent'] $status,
+    Boolean $tls_enable,
+    String $director_name,
+    String $monitor_name,
+    String $pwd_for_director,
+    String $pwd_for_monitor,
+    String $bind_address,
+    Array[String] $backup_files,
+    Array[String] $exclude_files,
+    Array[String] $schedules,
+    Enum['All','AllButInformational'] $messages
 )
 {
 
