@@ -13,7 +13,7 @@
 #
 
 Director {                            # define myself
-  Name = <%= @fqdn %>-dir
+  Name = default-director
   DIRport = 9101                # where we listen for UA connections
   QueryFile = "/etc/bacula/scripts/query.sql"
   WorkingDirectory = "/var/lib/bacula"
@@ -188,7 +188,7 @@ Pool {
 # Restricted console used by tray-monitor to get the status of the director
 #
 Console {
-  Name = <%= @fqdn %>-mon
+  Name = default-monitor
   Password = "<%= @pwd_for_monitor %>"
   CommandACL = status, .status
 }

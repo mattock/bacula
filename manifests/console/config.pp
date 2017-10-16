@@ -5,7 +5,6 @@
 #
 class bacula::console::config
 (
-    $director_name,
     $director_address_ipv4,
     $director_password,
     $tls_enable
