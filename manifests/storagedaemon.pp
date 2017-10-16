@@ -29,9 +29,9 @@
 # [*backup_directory*]
 #   The directory where backups are stored. Defaults to '/var/backups/bacula'.
 # [*tls_enable*]
-#   Enable TLS. Defaults to 'no'.
+#   Enable TLS. Valid values are true and false (default)
 # [*use_puppet_certs*]
-#   Use puppet certs for TLS. Defaults to 'yes'.
+#   Use puppet certs for TLS. Valid values are true (default) and false.
 # [*monitor_email*]
 #   Email address where local service monitoring software sends it's reports to.
 #   Defaults to global variable $::servermonitor.
