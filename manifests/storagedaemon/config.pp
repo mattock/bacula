@@ -5,8 +5,6 @@
 #
 class bacula::storagedaemon::config
 (
-    $director_name,
-    $monitor_name,
     $pwd_for_director,
     $pwd_for_monitor,
     $bind_address,

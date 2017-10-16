@@ -11,7 +11,7 @@
 # List Directors who are permitted to contact this File daemon
 #
 Director {
-  Name = <%= @director_name %>
+  Name = default-director
   Password = "<%= @pwd_for_director %>"
 
   <% if @tls_enable == "yes" %>
@@ -29,7 +29,7 @@ Director {
 #   status of the file daemon
 #
 Director {
-  Name = <%= @monitor_name %>
+  Name = default-monitor
   Password = "<%= @pwd_for_monitor %>"
   Monitor = yes
 }
@@ -58,5 +58,5 @@ FileDaemon {                          # this is me
 # Send all messages except skipped files back to Director
 Messages {
   Name = All
-  director = <%= @director_name %> = all, !skipped, !restored
+  director = default-director = all, !skipped, !restored
 }

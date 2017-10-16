@@ -16,10 +16,6 @@
 #   Manage monit rules. Valid values are true (default) and false.
 # [*director_address_ipv4*]
 #   IP-address for incoming Bacula Director packets.
-# [*director_name*]
-#   Name of the Director allowed to contact this filedaemon
-# [*monitor_name*]
-#   Name of the Monitor allowed to contact this filedaemon
 # [*pwd_for_director*]
 #   Password for the Director that contacts this filedaemon
 # [*pwd_for_monitor*]
@@ -54,9 +50,7 @@ class bacula::storagedaemon
     Boolean $manage = true,
     Boolean $manage_packetfilter = true,
     Boolean $manage_monit = true,
-            $director_name,
             $director_address_ipv4,
-            $monitor_name,
             $pwd_for_director,
             $pwd_for_monitor,
             $bind_address = undef,
@@ -78,8 +72,6 @@ if $manage {
     include ::bacula::storagedaemon::install
 
     class { '::bacula::storagedaemon::config':
-        director_name    => $director_name,
-        monitor_name     => $monitor_name,
         pwd_for_director => $pwd_for_director,
         pwd_for_monitor  => $pwd_for_monitor,
         bind_address     => $bind_address,

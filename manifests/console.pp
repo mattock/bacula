@@ -5,8 +5,6 @@
 #
 # == Parameters
 #
-# [*director_name*]
-#   Name of the Director to contact
 # [*director_address_ipv4*]
 #   IPv4 address of the Director to contact
 # [*director_password*]
@@ -30,7 +28,6 @@
 #
 class bacula::console
 (
-    $director_name,
     $director_address_ipv4,
     $director_password,
     $tls_enable = 'no',
@@ -48,7 +45,6 @@ if hiera('manage_bacula_console', true) != false {
     include ::bacula::console::install
 
     class { '::bacula::console::config':
-        director_name         => $director_name,
         director_address_ipv4 => $director_address_ipv4,
         director_password     => $director_password,
         tls_enable            => $tls_enable,

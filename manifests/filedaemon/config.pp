@@ -7,8 +7,6 @@ class bacula::filedaemon::config
 (
     Enum['present','absent'] $status,
     Boolean $tls_enable,
-    String $director_name,
-    String $monitor_name,
     String $pwd_for_director,
     String $pwd_for_monitor,
     String $bind_address,

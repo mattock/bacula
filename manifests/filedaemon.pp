@@ -27,10 +27,6 @@
 #   to connect to 5.2.x-based Directors and StorageDaemons.
 # [*director_address_ipv4*]
 #   IP-address for incoming Bacula Director packets.
-# [*director_name*]
-#   Name of the Director allowed to contact this filedaemon
-# [*monitor_name*]
-#   Name of the Monitor allowed to contact this filedaemon
 # [*pwd_for_director*]
 #   Password for the Director that contacts this filedaemon
 # [*pwd_for_monitor*]
@@ -78,8 +74,6 @@ class bacula::filedaemon
     Boolean $tls_enable = false,
             $package_name = $::bacula::params::bacula_filedaemon_package,
             $director_address_ipv4,
-            $director_name,
-            $monitor_name,
             $pwd_for_director,
             $pwd_for_monitor,
             $bind_address=undef,
@@ -110,8 +104,6 @@ if $manage {
 
     class { '::bacula::filedaemon::config':
         status           => $status,
-        director_name    => $director_name,
-        monitor_name     => $monitor_name,
         pwd_for_director => $pwd_for_director,
         pwd_for_monitor  => $pwd_for_monitor,
         bind_address     => $bind_address,
