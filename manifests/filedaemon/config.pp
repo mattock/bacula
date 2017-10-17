@@ -27,7 +27,6 @@ class bacula::filedaemon::config
         $schedule_name = 'default-schedule'
     }
 
-    include ::os::params
     include ::bacula::params
 
     file { 'bacula-bacula-fd.conf':
@@ -35,7 +34,7 @@ class bacula::filedaemon::config
         name    => $::bacula::params::bacula_filedaemon_config,
         content => template('bacula/bacula-fd.conf.erb'),
         mode    => '0640',
-        owner   => root,
+        owner   => $::os::params::adminuser,
         group   => $::os::params::admingroup,
         require => Class['bacula::filedaemon::install'],
         notify  => Class['bacula::filedaemon::service'],
@@ -47,8 +46,8 @@ class bacula::filedaemon::config
         name    => "/etc/bacula/bacula-dir.conf.d/${::fqdn}.conf",
         content => template('bacula/bacula-dir.conf.d-fragment.erb'),
         mode    => '0640',
-        owner   => root,
-        group   => bacula,
+        owner   => $::os::params::adminuser,
+        group   => $::bacula::params::bacula_group,
         notify  => Class['bacula::director::service'],
         tag     => 'bacula-dir.conf.d-fragment',
     }
