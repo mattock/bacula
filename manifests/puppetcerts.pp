@@ -12,7 +12,7 @@ class bacula::puppetcerts {
 
     File {
         owner   => $::os::params::adminuser,
-        group   => bacula,
+        group   => $::bacula::params::bacula_group,
     }
 
     file { 'bacula-conf-dir':

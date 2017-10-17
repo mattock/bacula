@@ -10,12 +10,15 @@ define bacula::director::config::fragment
     $fd_password
 )
 {
+
+    include ::bacula::params
+
     @@file { "bacula-dir.conf.d-fragment-${::fqdn}":
         name    => "/etc/bacula/bacula-dir.conf.d/${::fqdn}.conf",
         content => template('bacula/bacula-dir.conf.d-fragment.erb'),
         mode    => '0640',
-        owner   => root,
-        group   => bacula,
+        owner   => $::os::params::admingroup,
+        group   => $::bacula::params::bacula_group,
         tag     => 'bacula-dir.conf.d-fragment',
     }
 }
