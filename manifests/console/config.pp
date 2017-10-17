@@ -5,9 +5,9 @@
 #
 class bacula::console::config
 (
-    $director_address_ipv4,
-    $director_password,
-    $tls_enable
+    String  $director_address_ipv4,
+    String  $director_password,
+    Boolean $tls_enable
 
 ) inherits bacula::params
 {
