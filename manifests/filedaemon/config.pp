@@ -11,10 +11,11 @@ class bacula::filedaemon::config
     String $pwd_for_monitor,
     String $bind_address,
     Array[String] $backup_files,
-    Array[String] $exclude_files,
-    Array[String] $schedules,
+    Optional[Array[String]] $exclude_files,
+    Optional[Array[String]] $schedules,
     Enum['All','AllButInformational'] $messages
-)
+
+) inherits bacula::params
 {
 
     # If the filedaemon was not given a custom schedule, then use the default 
@@ -26,8 +27,6 @@ class bacula::filedaemon::config
     } else {
         $schedule_name = 'default-schedule'
     }
-
-    include ::bacula::params
 
     file { 'bacula-bacula-fd.conf':
         ensure  => $status,
