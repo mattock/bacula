@@ -14,7 +14,7 @@ Director {
   Name = default-director
   Password = "<%= @pwd_for_director %>"
 
-  <% if @tls_enable == "yes" %>
+  <% if @tls_enable %>
   TLS Enable = yes
   TLS Require = yes
   TLS Verify Peer = yes
@@ -46,7 +46,7 @@ FileDaemon {                          # this is me
   Maximum Concurrent Jobs = 20
   FDAddress = <%= @bind_address %>
 
-  <% if @tls_enable == "yes" %>
+  <% if @tls_enable %>
   TLS Enable = yes
   TLS Require = yes
   TLS Certificate = <%= scope.lookupvar('bacula::params::ssl_dir') %>/bacula.crt

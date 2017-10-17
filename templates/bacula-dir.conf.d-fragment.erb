@@ -62,7 +62,7 @@ Client {
   Job Retention = 6 months            # six months
   AutoPrune = yes                     # Prune expired Jobs/Files
 
-  <% if @tls_enable == "yes" %>
+  <% if @tls_enable %>
   TLS Enable = yes
   TLS Require = yes
 

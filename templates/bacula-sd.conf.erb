@@ -18,7 +18,7 @@ Storage {                             # definition of myself
   Maximum Concurrent Jobs = 20
   SDAddress = <%= @bind_address %>
 
-  <% if @tls_enable == "yes" %>
+  <% if @tls_enable %>
   TLS Enable = yes
   TLS Require = yes
   TLS Certificate = /etc/bacula/ssl/bacula.crt
@@ -34,7 +34,7 @@ Director {
   Name = default-director
   Password = "<%= @pwd_for_director %>"
 
-  <% if @tls_enable == "yes" %>
+  <% if @tls_enable %>
   TLS Enable = yes
   TLS Require = yes
   TLS Verify Peer = yes
