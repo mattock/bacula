@@ -43,19 +43,16 @@ class bacula::director::config
         default => $email_from,
     }
 
-    File {
-        owner => $::os::params::adminuser,
-        group => $::bacula::params::bacula_group,
-        notify  => Class['::bacula::director::service'],
-    }
-
     # Main configuration file
     file { 'bacula-bacula-dir.conf':
         ensure  => present,
         name    => '/etc/bacula/bacula-dir.conf',
         content => template('bacula/bacula-dir.conf.erb'),
+        owner   => $::os::params::adminuser,
+        group   => $::bacula::params::bacula_group,
         mode    => '0640',
         require => Class['::bacula::director::install'],
+        notify  => Class['::bacula::director::service'],
     }
 
     # Configuration fragment directory; mainly for exported configuration 
@@ -63,28 +60,20 @@ class bacula::director::config
     file { 'bacula-bacula-dir.conf.d':
         ensure  => directory,
         name    => '/etc/bacula/bacula-dir.conf.d',
+        owner   => $::os::params::adminuser,
+        group   => $::bacula::params::bacula_group,
         mode    => '0750',
         require => Class['::bacula::director::install'],
-    }
-
-    # Backup catalog. Implemented as a separate fragment so that the Bacula
-    # Director does not fail trying to import files from an empty fragment
-    # directory.
-    file { "bacula-dir.conf.d-fragment-catalog":
-        ensure  => 'present',
-        name    => "/etc/bacula/bacula-dir.conf.d/catalog.conf",
-        content => template('bacula/bacula-dir-catalog.conf.erb'),
-        mode    => '0640',
-        require => File['bacula-bacula-dir.conf.d'],
+        notify  => Class['::bacula::director::service'],
     }
 
     # Make the delete_catalog_backup script executable
     file { 'bacula-delete_catalog_backup':
         name    => '/etc/bacula/scripts/delete_catalog_backup',
+        owner   => $::os::params::adminuser,
         group   => $::os::params::admingroup,
         mode    => '0755',
         require => Class['::bacula::director::install'],
-        notify  => undef,
     }
 
     # Import exported configuration fragments from clients

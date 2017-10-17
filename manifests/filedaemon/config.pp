@@ -39,6 +39,17 @@ class bacula::filedaemon::config
         notify  => Class['bacula::filedaemon::service'],
     }
 
+    # Backup catalog - applicable only on Bacula Director nodes
+    if defined_with_params(Class['::bacula::director::config']) {
+        file { "bacula-dir.conf.d-fragment-catalog":
+            ensure  => $status,
+            name    => "/etc/bacula/bacula-dir.conf.d/catalog.conf",
+            content => template('bacula/bacula-dir-catalog.conf.erb'),
+            mode    => '0640',
+            require => File['bacula-bacula-dir.conf.d'],
+        }
+    }
+
     # Export a Director configuration fragment from this node.
     @@file { "bacula-dir.conf.d-fragment-${::fqdn}":
         ensure  => $status,
