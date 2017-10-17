@@ -42,6 +42,7 @@ class bacula::director::config
         default => $email_from,
     }
 
+    # Main configuration file
     file { 'bacula-bacula-dir.conf':
         ensure  => present,
         name    => '/etc/bacula/bacula-dir.conf',
@@ -53,6 +54,8 @@ class bacula::director::config
         require => Class['bacula::director::install'],
     }
 
+    # Configuration fragment directory; mainly for exported configuration 
+    # fragments coming from Filedaemon nodes
     file { 'bacula-bacula-dir.conf.d':
         ensure  => directory,
         name    => '/etc/bacula/bacula-dir.conf.d',
@@ -60,6 +63,20 @@ class bacula::director::config
         owner   => root,
         group   => bacula,
         require => Class['bacula::director::install'],
+    }
+
+    # Backup catalog. Implemented as a separate fragment so that the Bacula
+    # Director does not fail trying to import files from an empty fragment
+    # directory.
+    file { "bacula-dir.conf.d-fragment-catalog":
+        ensure  => 'present',
+        name    => "/etc/bacula/bacula-dir.conf.d/catalog.conf",
+        content => template('bacula/bacula-dir-catalog.conf.erb'),
+        mode    => '0640',
+        owner   => root,
+        group   => bacula,
+        notify  => Class['bacula::director::service'],
+        require => File['bacula-bacula-dir.conf.d'],
     }
 
     # Make the delete_catalog_backup script executable
