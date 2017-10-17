@@ -10,6 +10,6 @@ class bacula::director::service {
     service { 'bacula-director':
         name    => $::bacula::params::bacula_director_service,
         enable  => true,
-        require => Class['bacula::director::config'],
+        require => Class['bacula::director::config::postgresql'],
     }
 }
