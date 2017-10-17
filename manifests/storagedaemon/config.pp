@@ -5,17 +5,14 @@
 #
 class bacula::storagedaemon::config
 (
-    $director_name,
-    $monitor_name,
     $pwd_for_director,
     $pwd_for_monitor,
     $bind_address,
     $backup_directory,
     $tls_enable
-)
-{
 
-    include ::bacula::params
+) inherits bacula::params
+{
 
     file { 'bacula-backup-directory':
         ensure => directory,
@@ -30,8 +27,8 @@ class bacula::storagedaemon::config
         name    => '/etc/bacula/bacula-sd.conf',
         content => template('bacula/bacula-sd.conf.erb'),
         mode    => '0640',
-        owner   => root,
-        group   => root,
+        owner   => $::os::params::adminuser,
+        group   => $::os::params::admingroup,
         notify  => Class['bacula::storagedaemon::service'],
         require => File['bacula-backup-directory'],
     }

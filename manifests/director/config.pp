@@ -22,7 +22,8 @@ class bacula::director::config
     $max_volumes,
     $email,
     $email_from
-)
+
+) inherits bacula::params
 {
 
 
@@ -42,31 +43,45 @@ class bacula::director::config
         default => $email_from,
     }
 
+    File {
+        owner   => $::os::params::adminuser,
+        group   => $::bacula::params::bacula_group,
+        require => Class['::bacula::director::install'],
+        notify  => Class['::bacula::director::service'],
+    }
+
+    # Simplistic config file that pulls in configuration fragments
     file { 'bacula-bacula-dir.conf':
         ensure  => present,
         name    => '/etc/bacula/bacula-dir.conf',
         content => template('bacula/bacula-dir.conf.erb'),
         mode    => '0640',
-        owner   => root,
-        group   => bacula,
-        notify  => Class['bacula::director::service'],
-        require => Class['bacula::director::install'],
     }
 
+    # Configuration fragment directory; mainly for exported configuration 
+    # fragments coming from Filedaemon nodes
     file { 'bacula-bacula-dir.conf.d':
         ensure  => directory,
         name    => '/etc/bacula/bacula-dir.conf.d',
         mode    => '0750',
-        owner   => root,
-        group   => bacula,
-        require => Class['bacula::director::install'],
+    }
+
+    # Main config file
+    file { 'director.conf':
+        ensure  => present,
+        name    => '/etc/bacula/bacula-dir.conf.d/00director.conf',
+        content => template('bacula/director.conf.erb'),
+        mode    => '0640',
+        require => File['bacula-bacula-dir.conf.d'],
     }
 
     # Make the delete_catalog_backup script executable
     file { 'bacula-delete_catalog_backup':
         name    => '/etc/bacula/scripts/delete_catalog_backup',
+        owner   => $::os::params::adminuser,
+        group   => $::os::params::admingroup,
         mode    => '0755',
-        require => Class['bacula::director::install'],
+        notify  => undef,
     }
 
     # Import exported configuration fragments from clients

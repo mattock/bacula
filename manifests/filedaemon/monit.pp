@@ -5,8 +5,8 @@
 #
 class bacula::filedaemon::monit
 (
-    $status,
-    $monitor_email
+    Enum['present','absent'] $status,
+    String $monitor_email
 )
 {
   @monit::fragment { 'bacula-bacula-fd.monit':

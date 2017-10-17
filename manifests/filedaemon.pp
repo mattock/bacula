@@ -27,16 +27,13 @@
 #   to connect to 5.2.x-based Directors and StorageDaemons.
 # [*director_address_ipv4*]
 #   IP-address for incoming Bacula Director packets.
-# [*director_name*]
-#   Name of the Director allowed to contact this filedaemon
-# [*monitor_name*]
-#   Name of the Monitor allowed to contact this filedaemon
 # [*pwd_for_director*]
 #   Password for the Director that contacts this filedaemon
 # [*pwd_for_monitor*]
 #   Password for the Monitor that contacts this filedaemon
 # [*bind_address*]
-#   Bind to this IPv4 address. Undef by default.
+#   Bind to this IPv4 address. Defaults to '127.0.0.1'. Use '0.0.0.0' to bind to 
+#   all interfaces.
 # [*tls_enable*]
 #   Enable TLS. Valid values are true and false (default).
 # [*use_puppet_certs*]
@@ -70,21 +67,19 @@
 #
 class bacula::filedaemon
 (
+    Enum['present','absent'] $status = 'present',
     Boolean $manage = true,
     Boolean $manage_packetfilter = true,
     Boolean $manage_monit = true,
-            $status = 'present',
+    Boolean $use_puppet_certs = true,
+    Boolean $tls_enable = false,
             $package_name = $::bacula::params::bacula_filedaemon_package,
             $director_address_ipv4,
-            $director_name,
-            $monitor_name,
             $pwd_for_director,
             $pwd_for_monitor,
-            $bind_address=undef,
-            $tls_enable = false,
+            $bind_address = '127.0.0.1',
             $backup_files,
             $exclude_files = undef,
-            $use_puppet_certs = true,
             $schedules = undef,
             $messages = 'All',
             $monitor_email = $::servermonitor
@@ -110,8 +105,6 @@ if $manage {
 
     class { '::bacula::filedaemon::config':
         status           => $status,
-        director_name    => $director_name,
-        monitor_name     => $monitor_name,
         pwd_for_director => $pwd_for_director,
         pwd_for_monitor  => $pwd_for_monitor,
         bind_address     => $bind_address,

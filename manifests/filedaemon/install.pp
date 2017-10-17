@@ -5,8 +5,9 @@
 #
 class bacula::filedaemon::install
 (
-    $status,
-    $package_name
+    Enum['present','absent'] $status,
+    String $package_name
+
 ) inherits bacula::params
 {
 

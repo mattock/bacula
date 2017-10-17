@@ -5,7 +5,7 @@
 #
 class bacula::filedaemon::service
 (
-    $ensure
+    Enum['present','absent'] $ensure
 
 ) inherits bacula::params
 {

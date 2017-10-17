@@ -12,7 +12,7 @@ class bacula::puppetcerts {
 
     File {
         owner   => $::os::params::adminuser,
-        group   => bacula,
+        group   => $::bacula::params::bacula_group,
     }
 
     file { 'bacula-conf-dir':
@@ -30,42 +30,21 @@ class bacula::puppetcerts {
         require => File['bacula-conf-dir'],
     }
 
-    exec { 'copy-puppet-cert-to-bacula.crt':
-        command => "cp -f ${::puppetagent::params::ssldir}/certs/${::fqdn}.pem ${::bacula::params::ssl_dir}/bacula.crt",
-        unless  => "cmp ${::puppetagent::params::ssldir}/certs/${::fqdn}.pem ${::bacula::params::ssl_dir}/bacula.crt",
-        path    => ['/bin', '/usr/bin/' ],
-        require => File['bacula-ssl-dir'],
-    }
+    $keys = {   "${::puppetagent::params::ssldir}/certs/${::fqdn}.pem"        => "${::bacula::params::ssl_dir}/bacula.crt",
+                "${::puppetagent::params::ssldir}/private_keys/${::fqdn}.pem" => "${::bacula::params::ssl_dir}/bacula.key",
+                "${::puppetagent::params::ssldir}/certs/ca.pem"               => "${::bacula::params::ssl_dir}/bacula-ca.crt", }
 
-    exec { 'copy-puppet-key-to-bacula.key':
-        command => "cp -f ${::puppetagent::params::ssldir}/private_keys/${::fqdn}.pem ${::bacula::params::ssl_dir}/bacula.key",
-        unless  => "cmp ${::puppetagent::params::ssldir}/private_keys/${::fqdn}.pem ${::bacula::params::ssl_dir}/bacula.key",
-        path    => ['/bin', '/usr/bin/' ],
-        require => File['bacula-ssl-dir'],
-    }
+    $keys.each |$key| {
+        exec { $key[1]:
+            command => "cp -f ${key[0]} ${key[1]}",
+            unless  => "cmp ${key[0]} ${key[1]}",
+            path    => ['/bin', '/usr/bin/' ],
+            require => File['bacula-ssl-dir'],
+        }
 
-    exec { 'copy-puppet-ca-cert-to-bacula-ca.crt':
-        command => "cp -f ${::puppetagent::params::ssldir}/certs/ca.pem ${::bacula::params::ssl_dir}/bacula-ca.crt",
-        unless  => "cmp ${::puppetagent::params::ssldir}/certs/ca.pem ${::bacula::params::ssl_dir}/bacula-ca.crt",
-        path    => ['/bin', '/usr/bin/' ],
-        require => File['bacula-ssl-dir'],
-    }
-
-    file { 'bacula.crt':
-        name    => "${::bacula::params::ssl_dir}/bacula.crt",
-        mode    => '0644',
-        require => Exec['copy-puppet-cert-to-bacula.crt'],
-    }
-
-    file { 'bacula.key':
-        name    => "${::bacula::params::ssl_dir}/bacula.key",
-        mode    => '0640',
-        require => Exec['copy-puppet-key-to-bacula.key'],
-    }
-
-    file { 'bacula-ca.crt':
-        name    => "${::bacula::params::ssl_dir}/bacula-ca.crt",
-        mode    => '0644',
-        require => Exec['copy-puppet-ca-cert-to-bacula-ca.crt'],
+        file { $key[1]:
+            mode    => '0640',
+            require => Exec[$key[1]],
+        }
     }
 }

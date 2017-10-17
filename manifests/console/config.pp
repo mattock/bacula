@@ -5,18 +5,18 @@
 #
 class bacula::console::config
 (
-    $director_name,
-    $director_address_ipv4,
-    $director_password,
-    $tls_enable
-)
+    String  $director_address_ipv4,
+    String  $director_password,
+    Boolean $tls_enable
+
+) inherits bacula::params
 {
     file { 'bacula-bconsole.conf':
         name    => '/etc/bacula/bconsole.conf',
         content => template('bacula/bconsole.conf.erb'),
         mode    => '0640',
-        owner   => root,
-        group   => root,
+        owner   => $::os::params::adminuser,
+        group   => $::os::params::admingroup,
         require => Class['bacula::console::install'],
     }
 }

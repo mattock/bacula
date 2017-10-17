@@ -16,7 +16,10 @@ class bacula::director::config::postgresql
     postgresql::loadsql { 'bacula-bacula-director.sql':
         modulename => 'bacula',
         basename   => 'bacula-director',
+        require    => Class['::postgresql::install'],
     }
+
+    $script_dir = '/usr/share/bacula-director'
 
     # FIXME: neither of the two following Execs seem to get run during initial
     # install. The reason could be the "refreshonly" parameter: the first
@@ -24,23 +27,24 @@ class bacula::director::config::postgresql
     # will not be loaded again later, when they could actually do some good.
     # At this point this is just pure speculation, but the problem itself has
     # been encountered on every Bacula install so far.
-    exec { 'bacula-make_postgresql_tables':
-        environment => [ 'db_name=bacula' ],
-        command     => '/usr/share/bacula-director/make_postgresql_tables',
-        cwd         => '/tmp',
+
+    Exec {
+        cwd         => $script_dir,
         path        => [ '/usr/bin' ],
         user        => 'postgres',
         refreshonly => true,
+        subscribe   => Postgresql::Loadsql['bacula-bacula-director.sql'],
+    }
+
+    exec { 'bacula-make_postgresql_tables':
+        environment => [ 'db_name=bacula' ],
+        command     => "${script_dir}/make_postgresql_tables",
         require     => Postgresql::Loadsql['bacula-bacula-director.sql'],
     }
 
     exec { 'bacula-grant_postgresql_privileges':
         environment => [ 'db_name=bacula', 'db_user=baculauser' ],
-        command     => '/usr/share/bacula-director/grant_postgresql_privileges',
-        cwd         => '/tmp',
-        path        => [ '/usr/bin' ],
-        user        => 'postgres',
-        refreshonly => true,
+        command     => "${script_dir}/grant_postgresql_privileges",
         require     => Exec['bacula-make_postgresql_tables'],
     }
 

@@ -34,7 +34,7 @@ Schedule {
 
 # List of files to be backed up
 FileSet {
-  Name = "Locally defined files at <%= @fqdn %>"
+  Name = "Files from <%= @fqdn %>"
   Include {
     Options {
       signature = SHA1
@@ -62,7 +62,7 @@ Client {
   Job Retention = 6 months            # six months
   AutoPrune = yes                     # Prune expired Jobs/Files
 
-  <% if @tls_enable == "yes" %>
+  <% if @tls_enable %>
   TLS Enable = yes
   TLS Require = yes
 

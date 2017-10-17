@@ -5,24 +5,17 @@
 #
 # == Parameters
 #
-# [*director_name*]
-#   Name of the Director to contact
+# [*manage*]
+#   Manage Bacula Console using Puppet. Valid values are true (default) and 
+#   false.
+# [*tls_enable*]
+#   Enable TLS. Defaults to false.
+# [*use_puppet_certs*]
+#   Use puppet certs for TLS. Defaults to true.
 # [*director_address_ipv4*]
 #   IPv4 address of the Director to contact
 # [*director_password*]
 #   Director's console password
-# [*tls_enable*]
-#   Enable TLS. Defaults to 'no'.
-# [*use_puppet_certs*]
-#   Use puppet certs for TLS. Defaults to 'yes'.
-#
-# == Examples
-#
-#   include bacula::console
-#
-# == Authors
-#
-# Samuli Seppänen <samuli.seppanen@gmail.com>
 #
 # == License
 #
@@ -30,17 +23,17 @@
 #
 class bacula::console
 (
-    $director_name,
-    $director_address_ipv4,
-    $director_password,
-    $tls_enable = 'no',
-    $use_puppet_certs = 'yes'
+    Boolean $manage = true,
+    Boolean $tls_enable = false,
+    Boolean $use_puppet_certs = true,
+            $director_address_ipv4,
+            $director_password,
 )
 {
 
-if hiera('manage_bacula_console', true) != false {
+if $manage {
 
-    if ( $use_puppet_certs == 'yes' ) and ( $tls_enable == 'yes' ) {
+    if ( $use_puppet_certs ) and ( $tls_enable ) {
         include ::bacula::puppetcerts
     }
 
@@ -48,7 +41,6 @@ if hiera('manage_bacula_console', true) != false {
     include ::bacula::console::install
 
     class { '::bacula::console::config':
-        director_name         => $director_name,
         director_address_ipv4 => $director_address_ipv4,
         director_password     => $director_password,
         tls_enable            => $tls_enable,

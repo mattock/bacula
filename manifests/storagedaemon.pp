@@ -16,22 +16,19 @@
 #   Manage monit rules. Valid values are true (default) and false.
 # [*director_address_ipv4*]
 #   IP-address for incoming Bacula Director packets.
-# [*director_name*]
-#   Name of the Director allowed to contact this filedaemon
-# [*monitor_name*]
-#   Name of the Monitor allowed to contact this filedaemon
 # [*pwd_for_director*]
 #   Password for the Director that contacts this filedaemon
 # [*pwd_for_monitor*]
 #   Password for the Monitor that contacts this filedaemon
 # [*bind_address*]
-#   Bind to this IPv4 address. Empty by default.
+#   Bind to this IPv4 address. Defaults to '127.0.0.1'. Set to '0.0.0.0' to 
+#   listen on all interfaces..
 # [*backup_directory*]
 #   The directory where backups are stored. Defaults to '/var/backups/bacula'.
 # [*tls_enable*]
-#   Enable TLS. Defaults to 'no'.
+#   Enable TLS. Valid values are true and false (default)
 # [*use_puppet_certs*]
-#   Use puppet certs for TLS. Defaults to 'yes'.
+#   Use puppet certs for TLS. Valid values are true (default) and false.
 # [*monitor_email*]
 #   Email address where local service monitoring software sends it's reports to.
 #   Defaults to global variable $::servermonitor.
@@ -54,12 +51,10 @@ class bacula::storagedaemon
     Boolean $manage = true,
     Boolean $manage_packetfilter = true,
     Boolean $manage_monit = true,
-            $director_name,
             $director_address_ipv4,
-            $monitor_name,
             $pwd_for_director,
             $pwd_for_monitor,
-            $bind_address = undef,
+            $bind_address = '127.0.0.1',
             $backup_directory = '/var/backups/bacula',
             $tls_enable = false,
             $use_puppet_certs = true,
@@ -78,8 +73,6 @@ if $manage {
     include ::bacula::storagedaemon::install
 
     class { '::bacula::storagedaemon::config':
-        director_name    => $director_name,
-        monitor_name     => $monitor_name,
         pwd_for_director => $pwd_for_director,
         pwd_for_monitor  => $pwd_for_monitor,
         bind_address     => $bind_address,

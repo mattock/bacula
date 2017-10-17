@@ -11,14 +11,14 @@
 #
 
 Storage {                             # definition of myself
-  Name = <%= @fqdn %>-sd
+  Name = default-storagedaemon
   SDPort = 9103                  # Director's port      
   WorkingDirectory = "/var/lib/bacula"
   Pid Directory = "/var/run/bacula"
   Maximum Concurrent Jobs = 20
   SDAddress = <%= @bind_address %>
 
-  <% if @tls_enable == "yes" %>
+  <% if @tls_enable %>
   TLS Enable = yes
   TLS Require = yes
   TLS Certificate = /etc/bacula/ssl/bacula.crt
@@ -31,10 +31,10 @@ Storage {                             # definition of myself
 # List Directors who are permitted to contact Storage daemon
 #
 Director {
-  Name = <%= @director_name %>
+  Name = default-director
   Password = "<%= @pwd_for_director %>"
 
-  <% if @tls_enable == "yes" %>
+  <% if @tls_enable %>
   TLS Enable = yes
   TLS Require = yes
   TLS Verify Peer = yes
@@ -49,7 +49,7 @@ Director {
 #   status of the storage daemon
 #
 Director {
-  Name = <%= @monitor_name %>
+  Name = default-monitor
   Password = "<%= @pwd_for_monitor %>"
   Monitor = yes
 }
@@ -80,5 +80,5 @@ Device {
 
 Messages {
   Name = All
-  director = <%= @director_name %> = all
+  director = default-director = all
 }

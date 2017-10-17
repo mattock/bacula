@@ -3,12 +3,12 @@
 #
 
 Director {
-  Name = <%= @director_name %>
+  Name = default-director
   DIRport = 9101
   Address = <%= @director_address_ipv4 %>
   Password = "<%= @director_password %>"
 
-  <% if @tls_enable == "yes" %>
+  <% if @tls_enable %>
   TLS Enable = yes
   TLS Require = yes
   TLS Certificate = /etc/bacula/ssl/bacula.crt

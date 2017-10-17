@@ -1,0 +1,170 @@
+#
+# Default Bacula Director Configuration file
+#
+#  The only thing that MUST be changed is to add one or more
+#   file or directory names in the Include directive of the
+#   FileSet resource.
+#
+#  For Bacula release 5.0.2 (28 April 2010) -- debian squeeze/sid
+#
+#  You might also want to change the default email address
+#   from root to your address.  See the "mail" and "operator"
+#   directives in the Messages resource.
+#
+
+Director {                            # define myself
+  Name = default-director
+  DIRport = 9101                # where we listen for UA connections
+  QueryFile = "/etc/bacula/scripts/query.sql"
+  WorkingDirectory = "/var/lib/bacula"
+  PidDirectory = "/var/run/bacula"
+  Maximum Concurrent Jobs = 1
+  Password = "<%= @pwd_for_console %>" # Console password
+  Messages = Daemon
+  DirAddress = <%= @bind_address %>
+
+  <% if @tls_enable %>
+  TLS Enable = yes 
+  TLS Require = yes
+  TLS Certificate = /etc/bacula/ssl/bacula.crt
+  TLS Key = /etc/bacula/ssl/bacula.key
+  TLS CA Certificate File = /etc/bacula/ssl/bacula-ca.crt
+  TLS Verify Peer = yes
+  <% end %>
+}
+
+Schedule {
+    Name = "default-schedule"
+<% @default_schedules.each do |entry| -%>
+    Run = <%= entry %>
+<% end -%>
+}
+
+Schedule {
+  Name = "WeeklyCycle"
+  Run = Full 1st sun at 23:05
+  Run = Differential 2nd-5th sun at 23:05
+  Run = Incremental mon-sat at 23:05
+}
+
+# This schedule does the catalog. It starts after the WeeklyCycle
+Schedule {
+  Name = "WeeklyCycleAfterBackup"
+  Run = Full sun-sat at 23:10
+}
+
+# This is the backup of the catalog
+FileSet {
+  Name = "Catalog"
+  Include {
+    Options {
+      signature = MD5
+    }
+    File = "/var/lib/bacula/bacula.sql"
+  }
+}
+
+# Definition of file storage device
+Storage {
+  Name = File
+# Do not use "localhost" here    
+  Address = <%= @sd_host %>                # N.B. Use a fully qualified name here
+  SDPort = 9103
+  Password = "<%= @sd_password %>"
+  Device = FileStorage
+  Media Type = File
+
+  <% if @tls_enable %>
+  TLS Enable = yes
+  TLS Require = yes
+  TLS Certificate = /etc/bacula/ssl/bacula.crt
+  TLS Key = /etc/bacula/ssl/bacula.key
+  TLS CA Certificate File = /etc/bacula/ssl/bacula-ca.crt
+  <% end %>
+}
+
+
+
+# Generic catalog service
+Catalog {
+  Name = MyCatalog
+# Uncomment the following line if you want the dbi driver
+# dbdriver = "dbi:sqlite3"; dbaddress = 127.0.0.1; dbport =  
+  dbname = "bacula"; dbuser = "baculauser"; dbpassword = "<%= @bacula_db_password %>"
+}
+
+# Reasonable message delivery -- send most everything to email address
+#  and to the console
+Messages {
+  Name = All
+#
+# NOTE! If you send to two email or more email addresses, you will need
+#  to replace the %r in the from field (-f part) with a single valid
+#  email address in both the mailcommand and the operatorcommand.
+#  What this does is, it sets the email address that emails would display
+#  in the FROM field, which is by default the same email as they're being
+#  sent to.  However, if you send email to more than one address, then
+#  you'll have to set the FROM address manually, to a single address. 
+#  for example, a 'no-reply@mydomain.com', is better since that tends to
+#  tell (most) people that its coming from an automated source.
+
+#
+  mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"<%= @l_email_from %>\" -s \"Bacula: %t %e of %c %l\" %r"
+  operatorcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"<%= @l_email_from %>\" -s \"Bacula: Intervention needed for %j\" %r"
+  mail = <%= @email %> = all, !skipped
+  operator = <%= @email %> = mount
+  console = all, !skipped, !saved
+
+# WARNING! the following will create a file that you must cycle from
+#          time to time as it will grow indefinitely. However, it will
+#          also keep all your messages if they scroll off the console.
+#
+  append = "/var/lib/bacula/log" = all, !skipped
+  catalog = all
+}
+
+#
+# Same as above but skip informational messages (e.g. Backup OK of...)
+Messages {
+  Name = AllButInformational
+  mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula: %t %e of %c %l\" %r"
+  operatorcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula: Intervention needed for %j\" %r"
+  mail = <%= @email %> = all, !info, !skipped
+  operator = <%= @email %> = mount
+  console = all, !skipped, !saved
+  append = "/var/lib/bacula/log" = all, !skipped
+  catalog = all
+}
+
+#
+# Message delivery for daemon messages (no job).
+Messages {
+  Name = Daemon
+  mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula daemon message\" %r"
+  mail = <%= @email %> = all, !skipped
+  console = all, !skipped, !saved
+  append = "/var/lib/bacula/log" = all, !skipped
+}
+
+# File Pool definition
+Pool {
+  Name = File
+  Pool Type = Backup
+  Recycle = yes                       # Bacula can automatically recycle Volumes
+  AutoPrune = yes                     # Prune expired volumes
+  Volume Retention = <%= @volume_retention %>
+  File Retention = <%= @file_retention %>
+  Job Retention = <%= @job_retention %>
+  Maximum Volume Bytes = <%= @max_volume_bytes %>
+  Maximum Volumes = <%= @max_volumes %>
+  LabelFormat = "Vol"
+}
+
+#
+# Restricted console used by tray-monitor to get the status of the director
+#
+Console {
+  Name = default-monitor
+  Password = "<%= @pwd_for_monitor %>"
+  CommandACL = status, .status
+}
