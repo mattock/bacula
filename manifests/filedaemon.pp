@@ -32,7 +32,8 @@
 # [*pwd_for_monitor*]
 #   Password for the Monitor that contacts this filedaemon
 # [*bind_address*]
-#   Bind to this IPv4 address. Undef by default.
+#   Bind to this IPv4 address. Defaults to '127.0.0.1'. Use '0.0.0.0' to bind to 
+#   all interfaces.
 # [*tls_enable*]
 #   Enable TLS. Valid values are true and false (default).
 # [*use_puppet_certs*]
@@ -76,7 +77,7 @@ class bacula::filedaemon
             $director_address_ipv4,
             $pwd_for_director,
             $pwd_for_monitor,
-            $bind_address=undef,
+            $bind_address = '127.0.0.1',
             $backup_files,
             $exclude_files = undef,
             $schedules = undef,
