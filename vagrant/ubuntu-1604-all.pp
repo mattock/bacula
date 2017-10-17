@@ -16,7 +16,7 @@ class { '::bacula::director':
     pwd_for_console      => 'console',
     pwd_for_monitor      => 'monitor',
     sd_host              => '127.0.0.1',
-    sd_password          => 'storagedaemon',
+    sd_password          => 'director',
     postgresql_auth_line => 'local bacula baculauser  password',
     bacula_db_password   => 'db',
     bind_address         => '0.0.0.0',
