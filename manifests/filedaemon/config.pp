@@ -28,37 +28,48 @@ class bacula::filedaemon::config
         $schedule_name = 'default-schedule'
     }
 
-    file { 'bacula-bacula-fd.conf':
-        ensure  => $status,
-        name    => $::bacula::params::bacula_filedaemon_config,
-        content => template('bacula/bacula-fd.conf.erb'),
-        mode    => '0640',
-        owner   => $::os::params::adminuser,
-        group   => $::os::params::admingroup,
-        require => Class['bacula::filedaemon::install'],
+    File {
+        ensure => $status,
+        owner  => $::os::params::adminuser,
+        mode   => '0640',
         notify  => Class['bacula::filedaemon::service'],
     }
 
-    # Backup catalog - applicable only on Bacula Director nodes
-    if defined_with_params(Class['::bacula::director::config']) {
-        file { "bacula-dir.conf.d-fragment-catalog":
-            ensure  => $status,
-            name    => "/etc/bacula/bacula-dir.conf.d/catalog.conf",
-            content => template('bacula/bacula-dir-catalog.conf.erb'),
-            mode    => '0640',
-            require => File['bacula-bacula-dir.conf.d'],
-        }
+    file { 'bacula-bacula-fd.conf':
+        name    => $::bacula::params::bacula_filedaemon_config,
+        content => template('bacula/bacula-fd.conf.erb'),
+        mode    => '0640',
+        group   => $::os::params::admingroup,
+        require => Class['bacula::filedaemon::install'],
     }
 
-    # Export a Director configuration fragment from this node.
-    @@file { "bacula-dir.conf.d-fragment-${::fqdn}":
-        ensure  => $status,
-        name    => "/etc/bacula/bacula-dir.conf.d/${::fqdn}.conf",
-        content => template('bacula/bacula-dir.conf.d-fragment.erb'),
-        mode    => '0640',
-        owner   => $::os::params::adminuser,
-        group   => $::bacula::params::bacula_group,
-        notify  => Class['bacula::director::service'],
-        tag     => 'bacula-dir.conf.d-fragment',
+    $director_fragment_name = "/etc/bacula/bacula-dir.conf.d/${::fqdn}.conf"
+    $director_fragment_content = template('bacula/bacula-dir.conf.d-fragment.erb')
+
+    # Check if this node is a Director
+    if defined_with_params(Class['::bacula::director::config']) {
+        file { "bacula-dir.conf.d-fragment-catalog":
+            name    => "/etc/bacula/bacula-dir.conf.d/catalog.conf",
+            content => template('bacula/bacula-dir-catalog.conf.erb'),
+            group   => $::bacula::params::bacula_group,
+            require => File['bacula-bacula-dir.conf.d'],
+        }
+
+        # Instantiate this resource directly if this is a Director node to
+        # facilitate testing with Vagrant and "puppet apply".
+        file { "bacula-dir.conf.d-fragment-${::fqdn}":
+            name    => $director_fragment_name,
+            content => $director_fragment_content,
+            group   => $::bacula::params::bacula_group,
+        }
+    } else {
+        # This is _not_ a Director node, so export a Director configuration 
+        # fragment.
+        @@file { "bacula-dir.conf.d-fragment-${::fqdn}":
+            name    => $director_fragment_name,
+            content => $director_fragment_content,
+            group   => $::bacula::params::bacula_group,
+            tag     => 'bacula-dir.conf.d-fragment',
+        }
     }
 }
