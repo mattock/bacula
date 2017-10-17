@@ -144,7 +144,7 @@ Messages {
 Messages {
   Name = Daemon
   mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula daemon message\" %r"
-  mail = <%= @email_from %> = all, !skipped
+  mail = <%= @email %> = all, !skipped
   console = all, !skipped, !saved
   append = "/var/lib/bacula/log" = all, !skipped
 }
