@@ -6,8 +6,8 @@ A puppet module to manage Bacula Directors, Storagedaemons and Filedaemons
 
 The Puppet manifests written for Vagrant show how to use the module:
 
-* [Ubuntu 16.04 (all daemons+console)](vagrant/ubuntu-1604-all.pp)
-* [Ubuntu 16.04 (filedaemon)](vagrant/ubuntu-1604-fd.pp)
+* [All daemons+console](vagrant/all.pp)
+* [Filedaemon only](vagrant/fd.pp)
 
 For further details refer to module entrypoints:
 
