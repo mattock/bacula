@@ -32,4 +32,19 @@ Vagrant.configure("2") do |config|
       vb.memory = 768
     end
   end
+
+  # CentOS 7-based Filedaemon
+  config.vm.define "centos-7-fd" do |box|
+    box.vm.box = "puppetlabs/centos-7.0-64-puppet"
+    box.vm.box_version = "1.0.2"
+    box.vm.hostname = "centos-7-fd.local"
+    box.vm.network "private_network", ip: "192.168.138.202"
+    box.vm.provision "shell", path: "vagrant/prepare_redhat.sh"
+    box.vm.provision "shell", path: "vagrant/prepare_modulepath.sh"
+    box.vm.provision "shell", inline: "puppet apply --modulepath /tmp/modules /vagrant/vagrant/fd.pp"
+    box.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.memory = 768
+    end
+  end
 end

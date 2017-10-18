@@ -26,4 +26,7 @@ for module in stdlib firewall; do
     test -d $module || git clone https://github.com/puppetlabs/puppetlabs-$module.git $module
 done
 
+# Other modules
+test -d epel || git clone https://github.com/Puppet-Finland/puppet-module-epel.git epel
+
 cd $CWD
