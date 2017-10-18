@@ -18,11 +18,11 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Ubuntu 16.04-based Filedaemon
-  config.vm.define "ubuntu-1604-fd" do |box|
-    box.vm.box = "puppetlabs/ubuntu-16.04-64-puppet"
-    box.vm.box_version = "1.0.0"
-    box.vm.hostname = "ubuntu-1604-fd.local"
+  # Ubuntu 14.04-based Filedaemon
+  config.vm.define "ubuntu-1404-fd" do |box|
+    box.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"
+    box.vm.box_version = "1.0.3"
+    box.vm.hostname = "ubuntu-1404-fd.local"
     box.vm.network "private_network", ip: "192.168.138.201"
     box.vm.provision "shell", path: "vagrant/prepare_debian.sh"
     box.vm.provision "shell", path: "vagrant/prepare_modulepath.sh"
