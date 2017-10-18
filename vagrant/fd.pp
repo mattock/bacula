@@ -2,6 +2,10 @@
 
 $email = 'root@localhost'
 
+if $::osfamily == 'RedHat' {
+    include ::epel
+}
+
 class { '::monit':
     email => $email,
 }
@@ -9,7 +13,7 @@ class { '::monit':
 # Ensure that Puppet certificate managements works - these code paths are not
 # exercised when using "puppet apply".
 $ssl_dir = '/etc/puppetlabs/puppet/ssl'
-file { ["${ssl_dir}/certs/${::fqdn}.pem", "${ssl_dir}/private_keys/${::fqdn}.pem" ]:
+file { ["${ssl_dir}/certs/ca.pem", "${ssl_dir}/certs/${::fqdn}.pem", "${ssl_dir}/private_keys/${::fqdn}.pem" ]:
     ensure => 'present',
 }
 include ::bacula::common
