@@ -19,7 +19,7 @@ class bacula::director::config::postgresql
         require    => Class['::postgresql::install'],
     }
 
-    $script_dir = '/usr/share/bacula-director'
+    $script_dir = $::bacula::params::script_dir
 
     # FIXME: neither of the two following Execs seem to get run during initial
     # install. The reason could be the "refreshonly" parameter: the first

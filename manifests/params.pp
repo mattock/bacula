@@ -20,10 +20,12 @@ class bacula::params {
             $bacula_storagedaemon_group = 'tape'
             $bacula_group = 'bacula'
             $pid_directory = '/var/run'
+            $log_directory = '/var/log/bacula'
             $working_directory = '/var/spool/bacula'
             $conf_dir = '/etc/bacula'
             $ssl_dir = "${conf_dir}/ssl"
             $query_file = '/etc/bacula/query.sql'
+            $script_dir = '/usr/libexec/bacula'
         }
         'Debian': {
             $bacula_director_package = 'bacula-director-pgsql'
@@ -37,10 +39,12 @@ class bacula::params {
             $bacula_storagedaemon_group = 'tape'
             $bacula_group = 'bacula'
             $pid_directory = '/var/run/bacula'
+            $log_directory = '/var/lib/bacula/log'
             $working_directory = '/var/lib/bacula'
             $conf_dir = '/etc/bacula'
             $ssl_dir = "${conf_dir}/ssl"
             $query_file = '/etc/bacula/scripts/query.sql'
+            $script_dir = '/usr/share/bacula-director'
         }
         'FreeBSD': {
             $bacula_filedaemon_package = 'bacula-client'

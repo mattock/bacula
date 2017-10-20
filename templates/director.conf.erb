@@ -16,8 +16,8 @@ Director {                            # define myself
   Name = default-director
   DIRport = 9101                # where we listen for UA connections
   QueryFile = "/etc/bacula/scripts/query.sql"
-  WorkingDirectory = "/var/lib/bacula"
-  PidDirectory = "/var/run/bacula"
+  WorkingDirectory = <%= scope.lookupvar('bacula::params::working_directory') %>
+  PidDirectory = <%= scope.lookupvar('bacula::params::pid_directory') %>
   Maximum Concurrent Jobs = 1
   Password = "<%= @pwd_for_console %>" # Console password
   Messages = Daemon
@@ -119,7 +119,7 @@ Messages {
 #          time to time as it will grow indefinitely. However, it will
 #          also keep all your messages if they scroll off the console.
 #
-  append = "/var/lib/bacula/log" = all, !skipped
+  append = "<%= scope.lookupvar('bacula::params::log_directory') %>" = all, !skipped
   catalog = all
 }
 
@@ -132,7 +132,7 @@ Messages {
   mail = <%= @email %> = all, !info, !skipped
   operator = <%= @email %> = mount
   console = all, !skipped, !saved
-  append = "/var/lib/bacula/log" = all, !skipped
+  append = "<%= scope.lookupvar('bacula::params::log_directory') %>" = all, !skipped
   catalog = all
 }
 
@@ -143,7 +143,7 @@ Messages {
   mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula daemon message\" %r"
   mail = <%= @email %> = all, !skipped
   console = all, !skipped, !saved
-  append = "/var/lib/bacula/log" = all, !skipped
+  append = "<%= scope.lookupvar('bacula::params::log_directory') %>" = all, !skipped
 }
 
 # File Pool definition
