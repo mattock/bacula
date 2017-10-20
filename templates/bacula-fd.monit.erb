@@ -1,6 +1,6 @@
 ### THIS FILE IS MANAGED BY PUPPET. ANY MANUAL CHANGES WILL GET OVERWRITTEN.
 
-check process bacula-fd with pidfile <%= scope['::bacula::params::pid_directory'] %>/bacula-fd.9102.pid
+check process bacula-fd with pidfile <%= scope['::bacula::params::bacula_filedaemon_pidfile'] %>
         start "<%= scope['::bacula::params::bacula_filedaemon_service_start'] %>"
         stop  "<%= scope['::bacula::params::bacula_filedaemon_service_stop'] %>"
         alert <%= scope['::bacula::filedaemon::monit::monitor_email'] %> with reminder on 480 cycles
