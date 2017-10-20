@@ -17,7 +17,7 @@ Director {                            # define myself
   DIRport = 9101                # where we listen for UA connections
   QueryFile = "/etc/bacula/scripts/query.sql"
   WorkingDirectory = <%= scope.lookupvar('bacula::params::working_directory') %>
-  PidDirectory = "/var/run/bacula"
+  PidDirectory = <%= scope.lookupvar('bacula::params::pid_directory') %>
   Maximum Concurrent Jobs = 1
   Password = "<%= @pwd_for_console %>" # Console password
   Messages = Daemon
@@ -119,7 +119,7 @@ Messages {
 #          time to time as it will grow indefinitely. However, it will
 #          also keep all your messages if they scroll off the console.
 #
-  append = "/var/lib/bacula/log" = all, !skipped
+  append = "<%= scope.lookupvar('bacula::params::log_directory') %>" = all, !skipped
   catalog = all
 }
 

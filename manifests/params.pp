@@ -20,6 +20,7 @@ class bacula::params {
             $bacula_storagedaemon_group = 'tape'
             $bacula_group = 'bacula'
             $pid_directory = '/var/run'
+            $log_directory = '/var/log/bacula'
             $working_directory = '/var/spool/bacula'
             $conf_dir = '/etc/bacula'
             $ssl_dir = "${conf_dir}/ssl"
@@ -37,6 +38,7 @@ class bacula::params {
             $bacula_storagedaemon_group = 'tape'
             $bacula_group = 'bacula'
             $pid_directory = '/var/run/bacula'
+            $log_directory = '/var/lib/bacula/log'
             $working_directory = '/var/lib/bacula'
             $conf_dir = '/etc/bacula'
             $ssl_dir = "${conf_dir}/ssl"
