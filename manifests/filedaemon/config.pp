@@ -8,6 +8,7 @@ class bacula::filedaemon::config
     Enum['present','absent'] $status,
     Boolean $is_director,
     Boolean $tls_enable,
+    String $export_tag,
     String $pwd_for_director,
     String $pwd_for_monitor,
     String $bind_address,
@@ -70,7 +71,7 @@ class bacula::filedaemon::config
             name    => $director_fragment_name,
             content => $director_fragment_content,
             group   => $::bacula::params::bacula_group,
-            tag     => 'bacula-dir.conf.d-fragment',
+            tag     => $export_tag,
         }
     }
 }

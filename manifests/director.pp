@@ -19,6 +19,13 @@
 #   Manage packet filtering rules. Valid values are true (default) and false.
 # [*manage_monit*]
 #   Manage monit rules. Valid values are true (default) and false.
+# [*export_tag*]
+#   Realize exported Bacula Director configuration fragments which have this 
+#   tag. The value of this parameter must match what is configured for
+#   ::bacula::filedaemon. This is useful during migrations and in cases where 
+#   there are more than one Bacula Director running in the same network. 
+#   Defaults to 'bacula-dir.conf.d-fragment' for compatibility with old module 
+#   versions.
 # [*console_host*]
 #   Allow console connections from this IPv4 address. Defaults to 127.0.0.1
 # [*bind_address*]
@@ -89,6 +96,7 @@ class bacula::director
     Boolean $manage_monit = true,
     Boolean $use_puppet_certs = true,
     Boolean $tls_enable = false,
+            $export_tag = 'bacula-dir.conf.d-fragment',
             $console_host = '127.0.0.1',
             $bind_address = '127.0.0.1',
             $pwd_for_console,
@@ -121,6 +129,7 @@ if $manage {
 
     class { '::bacula::director::config':
         manage_db            => $manage_db,
+        export_tag           => $export_tag,
         bind_address         => $bind_address,
         pwd_for_console      => $pwd_for_console,
         pwd_for_monitor      => $pwd_for_monitor,

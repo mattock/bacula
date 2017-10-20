@@ -5,23 +5,24 @@
 #
 class bacula::director::config
 (
-    $manage_db,
-    $bind_address,
-    $pwd_for_console,
-    $pwd_for_monitor,
-    $sd_host,
-    $sd_password,
-    $postgresql_auth_line,
-    $bacula_db_password,
-    $tls_enable,
-    $default_schedules,
-    $file_retention,
-    $job_retention,
-    $volume_retention,
-    $max_volume_bytes,
-    $max_volumes,
-    $email,
-    $email_from
+    Boolean $manage_db,
+    String  $export_tag,
+    String  $bind_address,
+    String  $pwd_for_console,
+    String  $pwd_for_monitor,
+    String  $sd_host,
+    String  $sd_password,
+            $postgresql_auth_line,
+    String  $bacula_db_password,
+    Boolean $tls_enable,
+    Array[String] $default_schedules,
+    String  $file_retention,
+    String  $job_retention,
+    String  $volume_retention,
+    String  $max_volume_bytes,
+    Integer $max_volumes,
+    String  $email,
+    Optional[String] $email_from
 
 ) inherits bacula::params
 {
@@ -85,5 +86,5 @@ class bacula::director::config
     }
 
     # Import exported configuration fragments from clients
-    File <<| tag == 'bacula-dir.conf.d-fragment' |>>
+    File <<| tag == $export_tag |>>
 }

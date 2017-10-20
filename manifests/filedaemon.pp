@@ -15,6 +15,10 @@
 #   Manage packet filtering rules. Valid values are true (default) and false.
 # [*manage_monit*]
 #   Manage monit rules. Valid values are true (default) and false.
+# [*export_tag*]
+#  Export Bacula Director configuration fragments with this tag. This must match 
+#  what is configured for ::bacula::director. Defaults to 
+#  'bacula-dir.conf.d-fragment' for compatibility with old module versions.
 # [*status*]
 #   Status of the Bacula Filedaemon. Valid values are 'present' and 'absent'. 
 #   Default value is 'present'. This is primary useful when decommissioning 
@@ -77,6 +81,7 @@ class bacula::filedaemon
     Boolean $manage_monit = true,
     Boolean $use_puppet_certs = true,
     Boolean $tls_enable = false,
+            $export_tag = 'bacula-dir.conf.d-fragment',
             $package_name = $::bacula::params::bacula_filedaemon_package,
             $is_director = false,
             $director_address_ipv4,
@@ -111,6 +116,7 @@ if $manage {
     class { '::bacula::filedaemon::config':
         status           => $status,
         is_director      => $is_director,
+        export_tag       => $export_tag,
         pwd_for_director => $pwd_for_director,
         pwd_for_monitor  => $pwd_for_monitor,
         bind_address     => $bind_address,
