@@ -1,6 +1,7 @@
-# FIXME: This is probably fairly Debian/Ubuntu specific
-check process bacula-dir with pidfile <%= scope.lookupvar('bacula::params::pid_directory') %>/bacula-dir.9101.pid
-        start "/etc/init.d/<%= scope.lookupvar('bacula::params::bacula_director_service') %> start"
-        stop  "/etc/init.d/<%= scope.lookupvar('bacula::params::bacula_director_service') %> stop"
-        alert <%= scope.lookupvar('bacula::director::monit::monitor_email') %> with reminder on 480 cycles
+### THIS FILE IS MANAGED BY PUPPET. ANY MANUAL CHANGES WILL GET OVERWRITTEN.
+
+check process bacula-dir with pidfile <%= scope['bacula::params::bacula_director_pidfile'] %>
+        start "<%= scope['::bacula::params::bacula_director_service_start'] %>"
+        stop "<%= scope['::bacula::params::bacula_director_service_stop'] %>"
+        alert <%= scope['::bacula::director::monit::monitor_email'] %> with reminder on 480 cycles
 
