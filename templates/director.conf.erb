@@ -132,7 +132,7 @@ Messages {
   mail = <%= @email %> = all, !info, !skipped
   operator = <%= @email %> = mount
   console = all, !skipped, !saved
-  append = "/var/lib/bacula/log" = all, !skipped
+  append = "<%= scope.lookupvar('bacula::params::log_directory') %>" = all, !skipped
   catalog = all
 }
 
@@ -143,7 +143,7 @@ Messages {
   mailcommand = "/usr/lib/bacula/bsmtp -h localhost -f \"\(Bacula\) bacula@<%= @fqdn %>\" -s \"Bacula daemon message\" %r"
   mail = <%= @email %> = all, !skipped
   console = all, !skipped, !saved
-  append = "/var/lib/bacula/log" = all, !skipped
+  append = "<%= scope.lookupvar('bacula::params::log_directory') %>" = all, !skipped
 }
 
 # File Pool definition
