@@ -19,6 +19,10 @@
 #   Status of the Bacula Filedaemon. Valid values are 'present' and 'absent'. 
 #   Default value is 'present'. This is primary useful when decommissioning 
 #   nodes to ensure that exported resources are cleaned up properly.
+# [*is_director*]
+#   Determines if this node is a Director also. Used to add catalog backup job 
+#   and to instantiate the filedaemon's main backup job without exporting it 
+#   first. Valid values are true and false (default).
 # [*package_name*]
 #   Override the default package name obtained from params.pp. This is useful
 #   if your operating system provides two different bacula-fd/bacula-client 
@@ -74,6 +78,7 @@ class bacula::filedaemon
     Boolean $use_puppet_certs = true,
     Boolean $tls_enable = false,
             $package_name = $::bacula::params::bacula_filedaemon_package,
+            $is_director = false,
             $director_address_ipv4,
             $pwd_for_director,
             $pwd_for_monitor,
@@ -105,6 +110,7 @@ if $manage {
 
     class { '::bacula::filedaemon::config':
         status           => $status,
+        is_director      => $is_director,
         pwd_for_director => $pwd_for_director,
         pwd_for_monitor  => $pwd_for_monitor,
         bind_address     => $bind_address,

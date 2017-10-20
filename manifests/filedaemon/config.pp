@@ -6,6 +6,7 @@
 class bacula::filedaemon::config
 (
     Enum['present','absent'] $status,
+    Boolean $is_director,
     Boolean $tls_enable,
     String $pwd_for_director,
     String $pwd_for_monitor,
@@ -46,10 +47,10 @@ class bacula::filedaemon::config
     $director_fragment_name = "/etc/bacula/bacula-dir.conf.d/${::fqdn}.conf"
     $director_fragment_content = template('bacula/bacula-dir.conf.d-fragment.erb')
 
-    # Check if this node is a Director
-    if defined_with_params(Class['::bacula::director::config']) {
-        file { "bacula-dir.conf.d-fragment-catalog":
-            name    => "/etc/bacula/bacula-dir.conf.d/catalog.conf",
+    if $is_director {
+
+        file { 'bacula-dir.conf.d-fragment-catalog':
+            name    => '/etc/bacula/bacula-dir.conf.d/catalog.conf',
             content => template('bacula/bacula-dir-catalog.conf.erb'),
             group   => $::bacula::params::bacula_group,
             require => File['bacula-bacula-dir.conf.d'],

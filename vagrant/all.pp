@@ -41,6 +41,7 @@ class { '::bacula::storagedaemon':
 }
 
 class { '::bacula::filedaemon':
+    is_director           => true,
     status                => 'present',
     manage_packetfilter   => true,
     manage_monit          => true,
