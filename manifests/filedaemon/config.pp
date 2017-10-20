@@ -72,6 +72,7 @@ class bacula::filedaemon::config
             content => $director_fragment_content,
             group   => $::bacula::params::bacula_group,
             tag     => $export_tag,
+            notify  => Class[$::bacula::director::service],
         }
     }
 }
