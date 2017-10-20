@@ -30,7 +30,7 @@ class bacula::puppetcerts {
         require => File['bacula-conf-dir'],
     }
 
-    $keys = {   "${::puppetagent::params::ssldir}/certs/${::fqdn}.pem"        => "${::bacula::params::ssl_dir}/bacula.crt",
+    $keys = {   "${::puppetagent::params::ssldir}/certs/${::fqdn}.pem"        => "${::bacula::params::ssl_dir}/bacula.crt",
                 "${::puppetagent::params::ssldir}/private_keys/${::fqdn}.pem" => "${::bacula::params::ssl_dir}/bacula.key",
                 "${::puppetagent::params::ssldir}/certs/ca.pem"               => "${::bacula::params::ssl_dir}/bacula-ca.crt", }
 
@@ -42,7 +42,7 @@ class bacula::puppetcerts {
             require => File['bacula-ssl-dir'],
         }
 
-        file { $key[1]:
+        file { $key[1]:
             mode    => '0640',
             require => Exec[$key[1]],
         }

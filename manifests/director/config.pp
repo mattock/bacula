@@ -28,7 +28,7 @@ class bacula::director::config
 
 
     if $manage_db {
-        class { '::postgresql':
+        class { '::postgresql':
             monitor_email => $email,
         }
 
